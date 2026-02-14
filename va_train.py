@@ -231,7 +231,7 @@ model = VAPPT_Gather(training_args.local_rank)
 
 lora_config = LoraConfig(
     r=16,
-    target_modules=["q_proj", "v_proj", "o_proj", "down_proj", "up_proj", "gate_proj"],
+    target_modules=["q_proj", "v_proj", "o_proj", "k_proj"],
     task_type=TaskType.FEATURE_EXTRACTION,
     lora_alpha=32,
     lora_dropout=0.05,
@@ -240,15 +240,38 @@ lora_config = LoraConfig(
 model.model = get_peft_model(model.model, lora_config)
 model.model.base_model.model.soft_prompt.weight.requires_grad = True
 model.model_wrapper() 
+for i in range(32):
+    model.model.encoder.base_model.model.model.layers[i].input_layernorm.weight.requires_grad = True
 # 打印可训练参数
 for name, param in model.named_parameters():
     if param.requires_grad:
         print(f"参数名称: {name}\t参数尺寸: {param.size()}")
 
-model_engine, _, _, _ = deepspeed.initialize(
+
+lora_parameters = []
+layer_norm_params = []
+for n, p in model.named_parameters():
+    if not p.requires_grad:
+        continue
+    if 'soft_prompt' in n:
+        continue
+    if 'layernorm' in name.lower(): # 判断名称中是否包含'layernorm'
+        layer_norm_params.append(param)
+        print(n)
+        continue
+    lora_parameters.append(p)
+
+optimizer = optim.AdamW([
+        {"params": model.model.encoder.base_model.model.soft_prompt.parameters(),   "lr": 1e-4, "weight_decay": 0.01},
+        {"params": lora_parameters, "lr": 3e-5, "weight_decay": 0.01},
+        {"params": layer_norm_params, "lr": 1e-6, "weight_decay": 0.01}
+    ], betas=(0.9, 0.95), eps=1e-6)
+
+model_engine, optimizer, _, _ = deepspeed.initialize(
     args=training_args,
     config_params=training_args.deepspeed,
     model=model,
+    optimizer=optimizer,
     model_parameters=model.parameters(),
 )
 
