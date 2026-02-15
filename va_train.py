@@ -262,7 +262,7 @@ for n, p in model.named_parameters():
     lora_parameters.append(p)
 
 optimizer = optim.AdamW([
-        {"params": model.model.encoder.base_model.model.soft_prompt.parameters(),   "lr": 1e-4, "weight_decay": 0.01},
+        {"params": model.model.encoder.base_model.model.soft_prompt.parameters(), "lr": 1e-4, "weight_decay": 0.01},
         {"params": lora_parameters, "lr": 3e-5, "weight_decay": 0.01},
         {"params": layer_norm_params, "lr": 1e-6, "weight_decay": 0.01}
     ], betas=(0.9, 0.95), eps=1e-6)
