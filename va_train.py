@@ -118,14 +118,13 @@ def load_data_and_sampling(file_path: str):
     return query, positive, negative
 
 
-def build_dataset(data_args: DataTrainingArguments, training_args: TrainingArguments):
+def build_dataset(data_args: DataTrainingArguments, training_args: TrainingArguments, query: torch.Tensor, positive: torch.Tensor, negative: torch.Tensor):
     """
     直接在脚本内做 tokenization，返回 HF Dataset（已经 map 好）。
     使用全局 tokenizer。
     """
     set_seed(2025)
 
-    query, positive, negative = load_data_and_sampling(data_args.path)
     dataset = Dataset.from_dict(
         {"query": query, "positive": positive, "negative": negative}
     )
@@ -178,6 +177,22 @@ def all_gather_tensor(tensor: torch.Tensor) -> torch.Tensor:
     torch.distributed.all_gather(gathered, tensor)
     return torch.cat(gathered, dim=0)
 
+def regularization_loss(full_query_embedding, full_positive_embedding, full_negative_embedding):
+    all_embeddings = torch.cat([full_query_embedding, full_positive_embedding, full_negative_embedding], dim=0) # 3*b, d
+    gram_matrix = all_embeddings.T @ all_embeddings # d, d， gram 矩阵
+    # 修改版infoNCE 优化
+    # 提升 gram matrix 的最小特征值
+    # 
+
+# dataset cover classification task, retrieval task, clustering task, reranking task, sts task
+def evaluation(dataset):
+    dataset_batch = tokenizer(dataset)
+    dataset_batch = {k: v.cuda() for k, v in dataset_batch.items()}
+    dataset_embedding = model_engine(**dataset_batch)# q_input_ids, p_input_ids, n_input_ids, q_a_m, p_a_m, n_a_m
+    gram_matrix = dataset_embedding.T @ dataset_embedding # d, d， gram 矩阵
+    # 观察需要观察 ， 最小特征值， 特征值方差....
+    # .....
+
 
 # ========= 解析命令行，初始化 tokenizer =========
 parser = HfArgumentParser((ModelArguments, DataTrainingArguments, TrainingArguments))
@@ -208,7 +223,8 @@ logging.basicConfig(
 )
 
 # ========= 构建数据集 =========
-encode_ds = build_dataset(data_args, training_args)
+query, positive, negative = load_data_and_sampling(data_args.path)
+encode_ds = build_dataset(data_args, training_args, query, positive, negative)
 encode_ds.save_to_disk("va_scl_data")  # 如果不想落盘可以注释掉
 
 # 只保留真实存在的列
@@ -277,21 +293,24 @@ for epoch in range(training_args.train_epoch):
             [full_positive_embedding, full_negative_embedding], dim=0
         )
         dot_products = full_query_embedding @ full_weight_embedding.T
-        temperature_adjustment = torch.full_like(dot_products, temperature / full_weight_embedding.shape[0])
-        num_positive_pairs = full_positive_embedding.shape[0]
-        diag_temp = torch.eye(num_positive_pairs) * temperature
-        diag_temp = diag_temp.to(temperature_adjustment.device, dtype=temperature_adjustment.dtype)
-        diag_temp[~torch.eye(num_positive_pairs).to(torch.bool)] = temperature_adjustment[:num_positive_pairs, :num_positive_pairs][~torch.eye(num_positive_pairs).to(torch.bool)]
-        temperature_adjustment[:num_positive_pairs, :num_positive_pairs] = diag_temp
-        temp_apply = dot_products / temperature_adjustment
+        # temperature_adjustment = torch.full_like(dot_products, temperature / full_weight_embedding.shape[0])
+        # num_positive_pairs = full_positive_embedding.shape[0]
+        # diag_temp = torch.eye(num_positive_pairs) * temperature
+        # diag_temp = diag_temp.to(temperature_adjustment.device, dtype=temperature_adjustment.dtype)
+        # diag_temp[~torch.eye(num_positive_pairs).to(torch.bool)] = temperature_adjustment[:num_positive_pairs, :num_positive_pairs][~torch.eye(num_positive_pairs).to(torch.bool)]
+        # temperature_adjustment[:num_positive_pairs, :num_positive_pairs] = diag_temp
+        temp_apply = dot_products / temperature #temperature_adjustment
         probs = F.log_softmax(temp_apply, dim=1)
 
         ground_truth = torch.arange(
             probs.shape[0], device=probs.device, dtype=torch.long
         )
+
         loss = F.nll_loss(probs, ground_truth)
 
-        model_engine.backward(loss)
+        final_loss = loss + regularization_loss()
+
+        model_engine.backward(final_loss)
 
         current_lr = model_engine.get_lr()[0]
         if training_args.local_rank == 0:
@@ -301,7 +320,8 @@ for epoch in range(training_args.train_epoch):
 
         if (idx + 1) % 200 == 0:
             model_engine.save_checkpoint(f"{model_args.save_dir}_epoch_{epoch}_step_{idx}")
-
+        if (idx + 1) % 50 == 0:
+            evaluation(dataset, model_engine)
         model_engine.step()
 
     # 每个 epoch 结束再存一份

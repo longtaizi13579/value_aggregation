@@ -506,3 +506,4 @@ class InforNCE_and_Eigenvalue(nn.Module):
             positive_weight_embedding_norm,
             negative_weight_embedding_norm,
         )
+    
