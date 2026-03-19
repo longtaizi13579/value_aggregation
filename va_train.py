@@ -15,7 +15,7 @@ from datasets import Dataset
 from transformers import AutoTokenizer, HfArgumentParser
 
 from arguments_va import ModelArguments, DataTrainingArguments, TrainingArguments
-from models import Value_Aggregation_Gather, VAPPT_Gather
+from models import Value_Aggregation_Gather, VAPPT_Gather, InforNCE_and_Eigenvalue
 from loss_utils import mismatched_sizes_all_gather
 use_auth_token = os.getenv("HUGGING_FACE_TOKEN")
 
@@ -108,7 +108,7 @@ def load_data_and_sampling(file_path: str):
         raise ValueError(f"未在 {file_path} 读取到任何样本")
 
     # 最多采样 1024000 条，样本不够就全用
-    num_samples = min(1024, len(all_data))
+    num_samples = min(1024000, len(all_data))
     samples = random.sample(all_data, num_samples)
 
     query = [s["query"] for s in samples]
@@ -227,51 +227,12 @@ encode_ds.set_format(
 # ========= 模型与 DeepSpeed =========
 torch.cuda.set_device(training_args.local_rank)
 
-model = VAPPT_Gather(training_args.local_rank)
+model = InforNCE_and_Eigenvalue(training_args.local_rank)
 
-lora_config = LoraConfig(
-    r=16,
-    target_modules=["q_proj", "v_proj", "o_proj", "k_proj"],
-    task_type=TaskType.FEATURE_EXTRACTION,
-    lora_alpha=32,
-    lora_dropout=0.05,
-)
-# 给 backbone 注入 LoRA
-model.model = get_peft_model(model.model, lora_config)
-model.model.base_model.model.soft_prompt.weight.requires_grad = True
-model.model_wrapper() 
-for i in range(32):
-    model.model.encoder.base_model.model.model.layers[i].input_layernorm.weight.requires_grad = True
-# 打印可训练参数
-for name, param in model.named_parameters():
-    if param.requires_grad:
-        print(f"参数名称: {name}\t参数尺寸: {param.size()}")
-
-
-lora_parameters = []
-layer_norm_params = []
-for n, p in model.named_parameters():
-    if not p.requires_grad:
-        continue
-    if 'soft_prompt' in n:
-        continue
-    if 'layernorm' in name.lower(): # 判断名称中是否包含'layernorm'
-        layer_norm_params.append(param)
-        print(n)
-        continue
-    lora_parameters.append(p)
-
-optimizer = optim.AdamW([
-        {"params": model.model.encoder.base_model.model.soft_prompt.parameters(), "lr": 1e-4, "weight_decay": 0.01},
-        {"params": lora_parameters, "lr": 3e-5, "weight_decay": 0.01},
-        {"params": layer_norm_params, "lr": 1e-6, "weight_decay": 0.01}
-    ], betas=(0.9, 0.95), eps=1e-6)
-
-model_engine, optimizer, _, _ = deepspeed.initialize(
+model_engine, _,  _, _ = deepspeed.initialize(
     args=training_args,
     config_params=training_args.deepspeed,
     model=model,
-    optimizer=optimizer,
     model_parameters=model.parameters(),
 )
 
@@ -298,7 +259,7 @@ for epoch in range(training_args.train_epoch):
         tqdm(data_loader, desc=f"Epoch: {epoch + 1}", total=1000)
     ):
         batch = {k: v.cuda() for k, v in batch.items()}
-
+        # InfoNCE loss
         # 这里假设 va_model.forward 接受和 batch 键同名的参数
         # 比如 def forward(self, query_input_ids, query_attention_mask, positive_input_ids, ...)
         query_embedding, positive_embedding, negative_embedding = model_engine(**batch)
@@ -315,14 +276,22 @@ for epoch in range(training_args.train_epoch):
         full_weight_embedding = torch.cat(
             [full_positive_embedding, full_negative_embedding], dim=0
         )
-
         dot_products = full_query_embedding @ full_weight_embedding.T
-        probs = F.log_softmax(dot_products / temperature, dim=1)
+        temperature_adjustment = torch.full_like(dot_products, temperature / full_weight_embedding.shape[0])
+        num_positive_pairs = full_positive_embedding.shape[0]
+        diag_temp = torch.eye(num_positive_pairs) * temperature
+        diag_temp = diag_temp.to(temperature_adjustment.device, dtype=temperature_adjustment.dtype)
+        diag_temp[~torch.eye(num_positive_pairs).to(torch.bool)] = temperature_adjustment[:num_positive_pairs, :num_positive_pairs][~torch.eye(num_positive_pairs).to(torch.bool)]
+        temperature_adjustment[:num_positive_pairs, :num_positive_pairs] = diag_temp
+        temp_apply = dot_products / temperature_adjustment
+        probs = F.log_softmax(temp_apply, dim=1)
 
         ground_truth = torch.arange(
             probs.shape[0], device=probs.device, dtype=torch.long
         )
         loss = F.nll_loss(probs, ground_truth)
+        import pdb
+        pdb.set_trace()
 
         model_engine.backward(loss)
 

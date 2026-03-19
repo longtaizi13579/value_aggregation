@@ -28,12 +28,12 @@ class TrainingArguments:
     weight_decay: float = field(default=1e-4)
     lr: float = field(default=1e-4)
     deepspeed:Optional[str] = field(
-        default="./va_deepspeed_stage.json",
+        default="./va_deepspeed_stage_new.json",
         metadata={
             "help": "Deepspeed file path."
         }
     )
     local_rank: Optional[int] = field(default=0)
-    train_epoch: Optional[int] = field(default=2)
+    train_epoch: Optional[int] = field(default=1)
     train_batch_size: Optional[int] = field(default=1024)
     dropout_rate: float = field(default=0.0)
