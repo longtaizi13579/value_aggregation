@@ -35,5 +35,5 @@ class TrainingArguments:
     )
     local_rank: Optional[int] = field(default=0)
     train_epoch: Optional[int] = field(default=1)
-    train_batch_size: Optional[int] = field(default=1024)
+    train_batch_size: Optional[int] = field(default=128)
     dropout_rate: float = field(default=0.0)

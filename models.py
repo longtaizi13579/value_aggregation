@@ -464,6 +464,7 @@ class InforNCE_and_Eigenvalue(nn.Module):
                 sub_input_ids,
                 sub_attention_mask,
                 dummy_tensor,
+                use_reentrant=True
             )  # [sub_B, H]
             embeddings.append(sub_emb)
 

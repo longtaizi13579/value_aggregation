@@ -233,7 +233,7 @@ model_engine, _,  _, _ = deepspeed.initialize(
     args=training_args,
     config_params=training_args.deepspeed,
     model=model,
-    model_parameters=model.parameters(),
+    # model_parameters=model.parameters(),
 )
 
 # ========= DataLoader =========
@@ -290,8 +290,6 @@ for epoch in range(training_args.train_epoch):
             probs.shape[0], device=probs.device, dtype=torch.long
         )
         loss = F.nll_loss(probs, ground_truth)
-        import pdb
-        pdb.set_trace()
 
         model_engine.backward(loss)
 
