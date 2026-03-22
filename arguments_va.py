@@ -7,6 +7,9 @@ class DataTrainingArguments:
         default='/data/ablation_study/data'
     )
     max_length: int = field(default=512)
+    eval_path: Optional[str] = field(
+        default='process_code/mteb_selected_sentences.txt'
+    )
     
 @dataclass
 class ModelArguments:
@@ -17,7 +20,7 @@ class ModelArguments:
         },
     )
     save_dir: Optional[str] = field(
-        default="/data/zyq/va_embedding",
+        default="./va_embedding",
         metadata={
             "help": "The place to save the trained model."
         },
