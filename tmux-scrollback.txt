@@ -1,0 +1,2354 @@
++-----------------------------------------------AutoDL-----------------------------------------------------+
+目录说明:
+╔═════════════════╦════════╦════╦═════════════════════════════════════════════════════════════════════════╗
+║目录             ║名称    ║速度║说明                                                                     ║
+╠═════════════════╬════════╬════╬═════════════════════════════════════════════════════════════════════════╣
+║/                ║系 统 盘║一般║实例关机数据不会丢失，可存放代码等。会
+随保存镜像一起保存。               ║
+║/root/autodl-tmp ║数 据 盘║ 快 ║实例关机数据不会丢失，可存放读写IO要求
+高的数据。但不会随保存镜像一起保存 ║
+╚═════════════════╩════════╩════╩═════════════════════════════════════════════════════════════════════════╝
+CPU ：32 核心
+内存：300 GB
+GPU ：NVIDIA H20, 2
+存储：
+  系 统 盘/               ：67% 20G/30G
+  数 据 盘/root/autodl-tmp：15% 82G/550G
++----------------------------------------------------------------------------------------------------------+
+*注意:
+1.系统盘较小请将大的数据存放于数据盘或文件存储中，重置系统时数据盘和文件存储中的数据不受影响
+2.清理系统盘请参考：https://www.autodl.com/docs/qa1/
+3.终端中长期执行命令请使用screen等工具开后台运行，确保程序不受SSH连接中断影响：https://www.autodl.com/docs/daemon/
+(base) root@autodl-container-65f3418573-59bbff33:~/mydata/value_aggregation# conda activate value_agg
+(value_agg) root@autodl-container-65f3418573-59bbff33:~/mydata/value_aggregation# bash ./run_va_gather.sh
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated.
+Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that in
+stalled pynvml for you.
+  import pynvml  # type: ignore[import]
+[2026-03-25 19:09:51,682] [WARNING] [runner.py:232:fetch_hostfile] Unable to find hostfile, will proceed with training with local resourc
+es only.
+[2026-03-25 19:09:51,682] [INFO] [runner.py:630:main] cmd = /root/miniconda3/envs/value_agg/bin/python3.12 -u -m deepspeed.launcher.launc
+h --world_info=eyJsb2NhbGhvc3QiOiBbMF19 --master_addr=127.0.0.1 --master_port=29500 --enable_each_rank_log=None --log_level=info va_train
+.py --train_batch_size 1024 --path /root/autodl-tmp/dataset --eval_path /root/autodl-tmp/process_code/mteb_selected_sentences.txt
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated.
+Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that in
+stalled pynvml for you.
+  import pynvml  # type: ignore[import]
+[2026-03-25 19:09:56,774] [INFO] [launch.py:162:main] WORLD INFO DICT: {'localhost': [0]}
+[2026-03-25 19:09:56,774] [INFO] [launch.py:168:main] nnodes=1, num_local_procs=1, node_rank=0
+[2026-03-25 19:09:56,774] [INFO] [launch.py:179:main] global_rank_mapping=defaultdict(<class 'list'>, {'localhost': [0]})
+[2026-03-25 19:09:56,774] [INFO] [launch.py:180:main] dist_world_size=1
+[2026-03-25 19:09:56,774] [INFO] [launch.py:184:main] Setting CUDA_VISIBLE_DEVICES=0
+[2026-03-25 19:09:56,775] [INFO] [launch.py:272:main] process 2823 spawned with command: ['/root/miniconda3/envs/value_agg/bin/python3.12
+', '-u', 'va_train.py', '--local_rank=0', '--train_batch_size', '1024', '--path', '/root/autodl-tmp/dataset', '--eval_path', '/root/autod
+l-tmp/process_code/mteb_selected_sentences.txt']
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated.
+Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that in
+stalled pynvml for you.
+  import pynvml  # type: ignore[import]
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/transformers/models/auto/tokenization_auto.py:897: FutureWarning: The `use_a
+uth_token` argument is deprecated and will be removed in v5 of Transformers. Please use `token` instead.
+  warnings.warn(
+Loading raw data:   0%|                                                                    | 0/14 [00:00<?, ?it/s]allnli.jsonl
+Loading raw data:   7%|████▎                                                       | 1/14 [00:00<00:07,  1.74it/s]dureader.jsonl
+Loading raw data:  14%|████████▌                                                   | 2/14 [00:01<00:12,  1.03s/it]eli5_question_answer.js
+onl
+Loading raw data:  21%|████████████▊                                               | 3/14 [00:02<00:06,  1.62it/s]fever.jsonl
+Loading raw data:  29%|█████████████████▏                                          | 4/14 [00:02<00:07,  1.39it/s]hotpot_qa.jsonl
+Loading raw data:  36%|█████████████████████▍                                      | 5/14 [00:03<00:05,  1.56it/s]miracl.jsonl
+Loading raw data:  43%|█████████████████████████▋                                  | 6/14 [00:03<00:04,  1.69it/s]mrtydi.jsonl
+Loading raw data:  50%|██████████████████████████████                              | 7/14 [00:04<00:04,  1.59it/s]msmarco_document.jsonl
+Loading raw data:  57%|██████████████████████████████████▎                         | 8/14 [00:07<00:08,  1.38s/it]msmarco_passage.jsonl
+Loading raw data:  64%|██████████████████████████████████████▌                     | 9/14 [00:08<00:06,  1.24s/it]nq.jsonl
+Loading raw data:  71%|██████████████████████████████████████████▏                | 10/14 [00:09<00:04,  1.04s/it]quora_duplicates.jsonl
+Loading raw data:  79%|██████████████████████████████████████████████▎            | 11/14 [00:09<00:02,  1.26it/s]squad.jsonl
+Loading raw data:  86%|██████████████████████████████████████████████████▌        | 12/14 [00:09<00:01,  1.36it/s]t2ranking.jsonl
+Loading raw data:  93%|██████████████████████████████████████████████████████▊    | 13/14 [00:13<00:01,  1.52s/it]trivia_qa.jsonl
+Loading raw data: 100%|███████████████████████████████████████████████████████████| 14/14 [00:14<00:00,  1.07s/it]
+随机种子已设置为 2025
+Map: 100%|█████████████████████████████████████████████████████| 1024000/1024000 [10:20<00:00, 1650.02 examples/s]
+Traceback (most recent call last):
+  File "/root/mydata/value_aggregation/va_train.py", line 512, in <module>
+    eval_q, eval_p, eval_n = load_eval_data(data_args.eval_path)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/mydata/value_aggregation/va_train.py", line 125, in load_eval_data
+    s1_file_in = open(s1_name, "r")
+                 ^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/root/autodl-tmp/process_code/mteb_selected_sentences.txt/s1.txt'
+[2026-03-25 19:21:06,860] [INFO] [launch.py:335:sigkill_handler] Killing subprocess 2823
+[2026-03-25 19:21:06,860] [ERROR] [launch.py:341:sigkill_handler] ['/root/miniconda3/envs/value_agg/bin/python3.12', '-u', 'va_train.py',
+ '--local_rank=0', '--train_batch_size', '1024', '--path', '/root/autodl-tmp/dataset', '--eval_path', '/root/autodl-tmp/process_code/mteb
+_selected_sentences.txt'] exits with return code = 1
+(value_agg) root@autodl-container-65f3418573-59bbff33:~/mydata/value_aggregation# bash ./run_va_gather.sh
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated.
+Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that in
+stalled pynvml for you.
+  import pynvml  # type: ignore[import]
+usage: deepspeed [-h] [-H HOSTFILE] [-i INCLUDE] [-e EXCLUDE] [--num_nodes NUM_NODES]
+                 [--min_elastic_nodes MIN_ELASTIC_NODES] [--max_elastic_nodes MAX_ELASTIC_NODES]
+                 [--num_gpus NUM_GPUS] [--master_port MASTER_PORT] [--master_addr MASTER_ADDR]
+                 [--node_rank NODE_RANK] [--launcher LAUNCHER] [--launcher_args LAUNCHER_ARGS] [--module]
+                 [--no_python] [--no_local_rank] [--no_ssh] [--no_ssh_check] [--force_multi] [--save_pid]
+                 [--enable_each_rank_log ENABLE_EACH_RANK_LOG] [--autotuning {tune,run}] [--elastic_training]
+                 [--bind_cores_to_rank] [--bind_core_list BIND_CORE_LIST] [--ssh_port SSH_PORT]
+                 [--venv_script VENV_SCRIPT] [--log_level {debug,info,warning,error,critical}] [-q]
+                 user_script ...
+deepspeed: error: argument --num_gpus/--num_accelerators: invalid int value: 'va_train.py'
+(value_agg) root@autodl-container-65f3418573-59bbff33:~/mydata/value_aggregation# bash ./run_va_gather.sh
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated.
+Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that in
+stalled pynvml for you.
+  import pynvml  # type: ignore[import]
+[2026-03-25 19:23:27,234] [WARNING] [runner.py:232:fetch_hostfile] Unable to find hostfile, will proceed with training with local resourc
+es only.
+[2026-03-25 19:23:27,234] [INFO] [runner.py:630:main] cmd = /root/miniconda3/envs/value_agg/bin/python3.12 -u -m deepspeed.launcher.launc
+h --world_info=eyJsb2NhbGhvc3QiOiBbMCwgMV19 --master_addr=127.0.0.1 --master_port=29500 --enable_each_rank_log=None --log_level=info va_t
+rain.py --train_batch_size 1024 --path /root/autodl-tmp/dataset
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated.
+Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that in
+stalled pynvml for you.
+  import pynvml  # type: ignore[import]
+[2026-03-25 19:23:32,026] [INFO] [launch.py:162:main] WORLD INFO DICT: {'localhost': [0, 1]}
+[2026-03-25 19:23:32,026] [INFO] [launch.py:168:main] nnodes=1, num_local_procs=2, node_rank=0
+[2026-03-25 19:23:32,026] [INFO] [launch.py:179:main] global_rank_mapping=defaultdict(<class 'list'>, {'localhost': [0, 1]})
+[2026-03-25 19:23:32,027] [INFO] [launch.py:180:main] dist_world_size=2
+[2026-03-25 19:23:32,027] [INFO] [launch.py:184:main] Setting CUDA_VISIBLE_DEVICES=0,1
+[2026-03-25 19:23:32,027] [INFO] [launch.py:272:main] process 9335 spawned with command: ['/root/miniconda3/envs/value_agg/bin/python3.12
+', '-u', 'va_train.py', '--local_rank=0', '--train_batch_size', '1024', '--path', '/root/autodl-tmp/dataset']
+[2026-03-25 19:23:32,028] [INFO] [launch.py:272:main] process 9336 spawned with command: ['/root/miniconda3/envs/value_agg/bin/python3.12
+', '-u', 'va_train.py', '--local_rank=1', '--train_batch_size', '1024', '--path', '/root/autodl-tmp/dataset']
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated.
+Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that in
+stalled pynvml for you.
+  import pynvml  # type: ignore[import]
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated.
+Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that in
+stalled pynvml for you.
+  import pynvml  # type: ignore[import]
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/transformers/models/auto/tokenization_auto.py:897: FutureWarning: The `use_a
+uth_token` argument is deprecated and will be removed in v5 of Transformers. Please use `token` instead.
+  warnings.warn(
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/transformers/models/auto/tokenization_auto.py:897: FutureWarning: The `use_a
+uth_token` argument is deprecated and will be removed in v5 of Transformers. Please use `token` instead.
+  warnings.warn(
+Loading raw data:   0%|                                                                    | 0/14 [00:00<?, ?it/s]allnli.jsonl
+Loading raw data:   0%|                                                                    | 0/14 [00:00<?, ?it/s]allnli.jsonl
+Loading raw data:   7%|████▎                                                       | 1/14 [00:00<00:07,  1.80it/s]dureader.jsonl
+Loading raw data:   7%|████▎                                                       | 1/14 [00:00<00:07,  1.76it/s]dureader.jsonl
+Loading raw data:  14%|████████▌                                                   | 2/14 [00:01<00:11,  1.00it/s]eli5_question_answer.js
+onl
+Loading raw data:  21%|████████████▊                                               | 3/14 [00:01<00:06,  1.68it/s]fever.jsonl
+Loading raw data:  14%|████████▌                                                   | 2/14 [00:01<00:12,  1.02s/it]eli5_question_answer.js
+onl
+Loading raw data:  21%|████████████▊                                               | 3/14 [00:02<00:06,  1.64it/s]fever.jsonl
+Loading raw data:  29%|█████████████████▏                                          | 4/14 [00:02<00:06,  1.43it/s]hotpot_qa.jsonl
+Loading raw data:  29%|█████████████████▏                                          | 4/14 [00:02<00:07,  1.39it/s]hotpot_qa.jsonl
+Loading raw data:  36%|█████████████████████▍                                      | 5/14 [00:03<00:05,  1.62it/s]miracl.jsonl
+Loading raw data:  36%|█████████████████████▍                                      | 5/14 [00:03<00:05,  1.59it/s]miracl.jsonl
+Loading raw data:  43%|█████████████████████████▋                                  | 6/14 [00:03<00:04,  1.77it/s]mrtydi.jsonl
+Loading raw data:  43%|█████████████████████████▋                                  | 6/14 [00:03<00:04,  1.74it/s]mrtydi.jsonl
+Loading raw data:  50%|██████████████████████████████                              | 7/14 [00:04<00:04,  1.67it/s]msmarco_document.jsonl
+Loading raw data:  50%|██████████████████████████████                              | 7/14 [00:04<00:04,  1.64it/s]msmarco_document.jsonl
+Loading raw data:  57%|██████████████████████████████████▎                         | 8/14 [00:07<00:07,  1.31s/it]msmarco_passage.jsonl
+Loading raw data:  57%|██████████████████████████████████▎                         | 8/14 [00:07<00:07,  1.33s/it]msmarco_passage.jsonl
+Loading raw data:  64%|██████████████████████████████████████▌                     | 9/14 [00:08<00:05,  1.18s/it]nq.jsonl
+Loading raw data:  64%|██████████████████████████████████████▌                     | 9/14 [00:08<00:05,  1.20s/it]nq.jsonl
+Loading raw data:  71%|██████████████████████████████████████████▏                | 10/14 [00:08<00:03,  1.01it/s]quora_duplicates.jsonl
+Loading raw data:  79%|██████████████████████████████████████████████▎            | 11/14 [00:08<00:02,  1.32it/s]squad.jsonl
+Loading raw data:  71%|██████████████████████████████████████████▏                | 10/14 [00:08<00:04,  1.01s/it]quora_duplicates.jsonl
+Loading raw data:  79%|██████████████████████████████████████████████▎            | 11/14 [00:09<00:02,  1.31it/s]squad.jsonl
+Loading raw data:  86%|██████████████████████████████████████████████████▌        | 12/14 [00:09<00:01,  1.44it/s]t2ranking.jsonl
+Loading raw data:  86%|██████████████████████████████████████████████████▌        | 12/14 [00:09<00:01,  1.42it/s]t2ranking.jsonl
+Loading raw data:  93%|██████████████████████████████████████████████████████▊    | 13/14 [00:12<00:01,  1.45s/it]trivia_qa.jsonl
+Loading raw data:  93%|██████████████████████████████████████████████████████▊    | 13/14 [00:12<00:01,  1.46s/it]trivia_qa.jsonl
+Loading raw data: 100%|███████████████████████████████████████████████████████████| 14/14 [00:14<00:00,  1.02s/it]
+Loading raw data: 100%|███████████████████████████████████████████████████████████| 14/14 [00:14<00:00,  1.03s/it]
+随机种子已设置为 2025
+随机种子已设置为 2025
+Map: 100%|█████████████████████████████████████████████████████| 1024000/1024000 [09:53<00:00, 1725.01 examples/s]
+随机种子已设置为 2025
+Map: 100%|███████████████████████████████████████████████████████████| 5409/5409 [00:01<00:00, 3055.64 examples/s]
+Map: 100%|████████████████████████████████████████████████████▋| 1018880/1024000 [09:55<00:02, 1978.53 examples/s]/root/miniconda3/envs/v
+alue_agg/lib/python3.12/site-packages/transformers/models/auto/auto_factory.py:476: FutureWarning: The `use_auth_token` argument is depre
+cated and will be removed in v5 of Transformers. Please use `token` instead.
+  warnings.warn(
+config.json: 2.91kB [00:00, 13.0MB/s]█████████████████████████▊| 1019904/1024000 [09:55<00:02, 1968.12 examples/s]
+Map: 100%|████████████████████████████████████████████████████▊| 1020928/1024000 [09:56<00:01, 1906.39 examples/s]Traceback (most recent
+call last):
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/transformers/models/auto/configuration_auto.py", line 1129, in from_
+pretrained
+    config_class = CONFIG_MAPPING[config_dict["model_type"]]
+                   ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/transformers/models/auto/configuration_auto.py", line 831, in __geti
+tem__
+    raise KeyError(key)
+KeyError: 'qwen3_5'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/root/mydata/value_aggregation/va_train.py", line 548, in <module>
+    model = InforNCE_and_Eigenvalue(training_args.local_rank, model_args.model_name)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/mydata/value_aggregation/models.py", line 424, in __init__
+    self.model = AutoModelForCausalLM.from_pretrained(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/transformers/models/auto/auto_factory.py", line 531, in from_pretrai
+ned
+    config, kwargs = AutoConfig.from_pretrained(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/transformers/models/auto/configuration_auto.py", line 1131, in from_
+pretrained
+    raise ValueError(
+ValueError: The checkpoint you are trying to load has model type `qwen3_5` but Transformers does not recognize this architecture. This co
+uld be because of an issue with the checkpoint, or because your version of Transformers is out of date.
+
+You can update Transformers with the command `pip install --upgrade transformers`. If this does not work, and the checkpoint is very new,
+ then there may not be a release version that supports this model yet. In this case, you can get the most up-to-date code by installing T
+ransformers from source with the command `pip install git+https://github.com/huggingface/transformers.git`
+Map: 100%|█████████████████████████████████████████████████████| 1024000/1024000 [09:57<00:00, 1713.25 examples/s]
+随机种子已设置为 2025
+Map: 100%|███████████████████████████████████████████████████████████| 5409/5409 [00:01<00:00, 2734.05 examples/s]
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/transformers/models/auto/auto_factory.py:476: FutureWarning: The `use_auth_t
+oken` argument is deprecated and will be removed in v5 of Transformers. Please use `token` instead.
+  warnings.warn(
+Traceback (most recent call last):
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/transformers/models/auto/configuration_auto.py", line 1129, in from_
+pretrained
+    config_class = CONFIG_MAPPING[config_dict["model_type"]]
+                   ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/transformers/models/auto/configuration_auto.py", line 831, in __geti
+tem__
+    raise KeyError(key)
+KeyError: 'qwen3_5'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/root/mydata/value_aggregation/va_train.py", line 548, in <module>
+    model = InforNCE_and_Eigenvalue(training_args.local_rank, model_args.model_name)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/mydata/value_aggregation/models.py", line 424, in __init__
+    self.model = AutoModelForCausalLM.from_pretrained(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/transformers/models/auto/auto_factory.py", line 531, in from_pretrai
+ned
+    config, kwargs = AutoConfig.from_pretrained(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/transformers/models/auto/configuration_auto.py", line 1131, in from_
+pretrained
+    raise ValueError(
+ValueError: The checkpoint you are trying to load has model type `qwen3_5` but Transformers does not recognize this architecture. This co
+uld be because of an issue with the checkpoint, or because your version of Transformers is out of date.
+
+You can update Transformers with the command `pip install --upgrade transformers`. If this does not work, and the checkpoint is very new,
+ then there may not be a release version that supports this model yet. In this case, you can get the most up-to-date code by installing T
+ransformers from source with the command `pip install git+https://github.com/huggingface/transformers.git`
+[2026-03-25 19:34:19,107] [INFO] [launch.py:335:sigkill_handler] Killing subprocess 9335
+[2026-03-25 19:34:19,107] [INFO] [launch.py:335:sigkill_handler] Killing subprocess 9336
+[2026-03-25 19:34:21,164] [ERROR] [launch.py:341:sigkill_handler] ['/root/miniconda3/envs/value_agg/bin/python3.12', '-u', 'va_train.py',
+ '--local_rank=1', '--train_batch_size', '1024', '--path', '/root/autodl-tmp/dataset'] exits with return code = 1
+(value_agg) root@autodl-container-65f3418573-59bbff33:~/mydata/value_aggregation# iniconda3/envs/value_agg/lib/python3.12/site-packages/t
+ransformers/models/auto/auto_factory.py:476: FutureWarning: The `use_auth_token` argument is deprecated and will be removed in v5 of Tran
+sformers. Please use `token` instead.
+-bash: use_auth_token: command not found
+-bash: token: command not found
+-bash: iniconda3/envs/value_agg/lib/python3.12/site-packages/transformers/models/auto/auto_factory.py:476:: No such file or directory
+(value_agg) root@autodl-container-65f3418573-59bbff33:~/mydata/value_aggregation#   warnings.warn(
+-bash: syntax error near unexpected token `newline'
+(value_agg) root@autodl-container-65f3418573-59bbff33:~/mydata/value_aggregation# Traceback (most recent call last):
+-bash: syntax error near unexpected token `most'
+(value_agg) root@autodl-container-65f3418573-59bbff33:~/mydata/value_aggregation#   File "/root/miniconda3/envs/value_agg/lib/python3.12/
+site-packages/transformers/models/auto/configuration_auto.py", line 1129, in from_pretrained
+-bash: File: command not found
+(value_agg) root@autodl-container-65f3418573-59bbff33:~/mydata/value_aggregation#     config_class = CONFIG_MAPPING[config_dict["model_ty
+pe"]]
+-bash: config_class: command not found
+(value_agg) root@autodl-container-65f3418573-59bbff33:~/mydata/value_aggregation#                    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+^^^^^
+-bash: ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^: command not found
+(value_agg) root@autodl-container-65f3418573-59bbff33:~/mydata/value_aggregation#   File "/root/miniconda3/envs/value_agg/lib/python3.12/
+site-packages/transformers/models/auto/configuration_auto.py", line 831, in __getitem__
+-bash: File: command not found
+(value_agg) root@autodl-container-65f3418573-59bbff33:~/mydata/value_aggregation#     raise KeyError(key)
+-bash: syntax error near unexpected token `('
+(value_agg) root@autodl-container-65f3418573-59bbff33:~/mydata/value_aggregation# KeyError: 'qwen3_5'
+-bash: KeyError:: command not found
+(value_agg) root@autodl-container-65f3418573-59bbff33:~/mydata/value_aggregation#
+(value_agg) root@autodl-container-65f3418573-59bbff33:~/mydata/value_aggregation# During handling of the above exception, another excepti
+on occurred:
+-bash: During: command not found
+(value_agg) root@autodl-container-65f3418573-59bbff33:~/mydata/value_aggregation#
+(value_agg) root@autodl-container-65f3418573-59bbff33:~/mydata/value_aggregation# Traceback (most recent call last):
+-bash: syntax error near unexpected token `most'
+(value_agg) root@autodl-container-65f3418573-59bbff33:~/mydata/value_aggregation#   File "/root/mydata/value_aggregation/va_train.py", li
+ne 548, in <module>
+-bash: syntax error near unexpected token `newline'
+(value_agg) root@autodl-container-65f3418573-59bbff33:~/mydata/value_aggregation#     model = InforNCE_and_Eigenvalue(training_args.local
+_rank, model_args.model_name)
+-bash: syntax error near unexpected token `('
+(value_agg) root@autodl-container-65f3418573-59bbff33:~/mydata/value_aggregation#             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+-bash: ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^: command not found
+(value_agg) root@autodl-container-65f3418573-59bbff33:~/mydata/value_aggregation#   File "/root/mydata/value_aggregation/models.py", line
+ 424, in __init__
+-bash: File: command not found
+(value_agg) root@autodl-container-65f3418573-59bbff33:~/mydata/value_aggregation#     self.model = AutoModelForCausalLM.from_pretrained(
+-bash: syntax error near unexpected token `('
+(value_agg) root@autodl-container-65f3418573-59bbff33:~/mydata/value_aggregation#                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+-bash: ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^: command not found
+(value_agg) root@autodl-container-65f3418573-59bbff33:~/mydata/value_aggregation#   File "/root/miniconda3/envs/value_agg/lib/python3.12/
+site-packages/transformers/models/auto/auto_factory.py", line 531, in from_pretrained
+-bash: File: command not found
+(value_agg) root@autodl-container-65f3418573-59bbff33:~/mydata/value_aggregation#     config, kwargs = AutoConfig.from_pretrained(
+-bash: syntax error near unexpected token `('
+(value_agg) root@autodl-container-65f3418573-59bbff33:~/mydata/value_aggregation#                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+-bash: ^^^^^^^^^^^^^^^^^^^^^^^^^^^: command not found
+(value_agg) root@autodl-container-65f3418573-59bbff33:~/mydata/value_aggregation#   File "/root/miniconda3/envs/value_agg/lib/python3.12/
+site-packages/transformers/models/auto/configuration_auto.py", line 1131, in from_pretrained
+-bash: File: command not found
+(value_agg) root@autodl-container-65f3418573-59bbff33:~/mydata/value_aggregation#     raise ValueError(
+-bash: syntax error near unexpected token `('
+(value_agg) root@autodl-container-65f3418573-59bbff33:~/mydata/value_aggregation# ValueError: The checkpoint you are trying to load has m
+odel type `qwen3_5` but Transformers does not recognize this architecture. This could be because of an issue with the checkpoint, or beca
+use your version of Transformers is out of date.
+-bash: qwen3_5: command not found
+-bash: ValueError:: command not found
+(value_agg) root@autodl-container-65f3418573-59bbff33:~/mydata/value_aggregation#
+(value_agg) root@autodl-container-65f3418573-59bbff33:~/mydata/value_aggregation# pip install --upgrade transformers
+Looking in indexes: http://mirrors.aliyun.com/pypi/simple
+Requirement already satisfied: transformers in /root/miniconda3/envs/value_agg/lib/python3.12/site-packages (4.51.0)
+Collecting transformers
+  Downloading http://mirrors.aliyun.com/pypi/packages/b8/88/ae8320064e32679a5429a2c9ebbc05c2bf32cefb6e076f9b07f6d685a9b4/transformers-5.3
+.0-py3-none-any.whl (10.7 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 10.7/10.7 MB 7.0 MB/s  0:00:01
+Collecting huggingface-hub<2.0,>=1.3.0 (from transformers)
+  Downloading http://mirrors.aliyun.com/pypi/packages/08/de/3ad061a05f74728927ded48c90b73521b9a9328c85d841bdefb30e01fb85/huggingface_hub-
+1.7.2-py3-none-any.whl (618 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 618.0/618.0 kB 515.1 kB/s  0:00:00
+Requirement already satisfied: numpy>=1.17 in /root/miniconda3/envs/value_agg/lib/python3.12/site-packages (from transformers) (1.26.4)
+Requirement already satisfied: packaging>=20.0 in /root/miniconda3/envs/value_agg/lib/python3.12/site-packages (from transformers) (25.0)
+Requirement already satisfied: pyyaml>=5.1 in /root/miniconda3/envs/value_agg/lib/python3.12/site-packages (from transformers) (6.0.3)
+Requirement already satisfied: regex!=2019.12.17 in /root/miniconda3/envs/value_agg/lib/python3.12/site-packages (from transformers) (202
+5.11.3)
+Collecting tokenizers<=0.23.0,>=0.22.0 (from transformers)
+  Downloading http://mirrors.aliyun.com/pypi/packages/2e/76/932be4b50ef6ccedf9d3c6639b056a967a86258c6d9200643f01269211ca/tokenizers-0.22.
+2-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (3.3 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3.3/3.3 MB 5.1 MB/s  0:00:00
+Collecting typer (from transformers)
+  Downloading http://mirrors.aliyun.com/pypi/packages/4a/91/48db081e7a63bb37284f9fbcefda7c44c277b18b0e13fbc36ea2335b71e6/typer-0.24.1-py3
+-none-any.whl (56 kB)
+Requirement already satisfied: safetensors>=0.4.3 in /root/miniconda3/envs/value_agg/lib/python3.12/site-packages (from transformers) (0.
+6.2)
+Requirement already satisfied: tqdm>=4.27 in /root/miniconda3/envs/value_agg/lib/python3.12/site-packages (from transformers) (4.67.1)
+Requirement already satisfied: filelock>=3.10.0 in /root/miniconda3/envs/value_agg/lib/python3.12/site-packages (from huggingface-hub<2.0
+,>=1.3.0->transformers) (3.20.0)
+Requirement already satisfied: fsspec>=2023.5.0 in /root/miniconda3/envs/value_agg/lib/python3.12/site-packages (from huggingface-hub<2.0
+,>=1.3.0->transformers) (2025.10.0)
+Collecting hf-xet<2.0.0,>=1.4.2 (from huggingface-hub<2.0,>=1.3.0->transformers)
+  Downloading http://mirrors.aliyun.com/pypi/packages/3c/4c/781267da3188db679e601de18112021a5cb16506fe86b246e22c5401a9c4/hf_xet-1.4.2-cp3
+7-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (4.2 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4.2/4.2 MB 5.9 MB/s  0:00:00
+Requirement already satisfied: httpx<1,>=0.23.0 in /root/miniconda3/envs/value_agg/lib/python3.12/site-packages (from huggingface-hub<2.0
+,>=1.3.0->transformers) (0.28.1)
+Requirement already satisfied: typing-extensions>=4.1.0 in /root/miniconda3/envs/value_agg/lib/python3.12/site-packages (from huggingface
+-hub<2.0,>=1.3.0->transformers) (4.15.0)
+Requirement already satisfied: anyio in /root/miniconda3/envs/value_agg/lib/python3.12/site-packages (from httpx<1,>=0.23.0->huggingface-
+hub<2.0,>=1.3.0->transformers) (4.11.0)
+Requirement already satisfied: certifi in /root/miniconda3/envs/value_agg/lib/python3.12/site-packages (from httpx<1,>=0.23.0->huggingfac
+e-hub<2.0,>=1.3.0->transformers) (2025.11.12)
+Requirement already satisfied: httpcore==1.* in /root/miniconda3/envs/value_agg/lib/python3.12/site-packages (from httpx<1,>=0.23.0->hugg
+ingface-hub<2.0,>=1.3.0->transformers) (1.0.9)
+Requirement already satisfied: idna in /root/miniconda3/envs/value_agg/lib/python3.12/site-packages (from httpx<1,>=0.23.0->huggingface-h
+ub<2.0,>=1.3.0->transformers) (3.11)
+Requirement already satisfied: h11>=0.16 in /root/miniconda3/envs/value_agg/lib/python3.12/site-packages (from httpcore==1.*->httpx<1,>=0
+.23.0->huggingface-hub<2.0,>=1.3.0->transformers) (0.16.0)
+Requirement already satisfied: sniffio>=1.1 in /root/miniconda3/envs/value_agg/lib/python3.12/site-packages (from anyio->httpx<1,>=0.23.0
+->huggingface-hub<2.0,>=1.3.0->transformers) (1.3.1)
+Requirement already satisfied: click>=8.2.1 in /root/miniconda3/envs/value_agg/lib/python3.12/site-packages (from typer->transformers) (8
+.3.0)
+Collecting shellingham>=1.3.0 (from typer->transformers)
+  Downloading http://mirrors.aliyun.com/pypi/packages/e0/f9/0595336914c5619e5f28a1fb793285925a8cd4b432c9da0a987836c7f822/shellingham-1.5.
+4-py2.py3-none-any.whl (9.8 kB)
+Requirement already satisfied: rich>=12.3.0 in /root/miniconda3/envs/value_agg/lib/python3.12/site-packages (from typer->transformers) (1
+4.2.0)
+Collecting annotated-doc>=0.0.2 (from typer->transformers)
+  Downloading http://mirrors.aliyun.com/pypi/packages/1e/d3/26bf1008eb3d2daa8ef4cacc7f3bfdc11818d111f7e2d0201bc6e3b49d45/annotated_doc-0.
+0.4-py3-none-any.whl (5.3 kB)
+Requirement already satisfied: markdown-it-py>=2.2.0 in /root/miniconda3/envs/value_agg/lib/python3.12/site-packages (from rich>=12.3.0->
+typer->transformers) (4.0.0)
+Requirement already satisfied: pygments<3.0.0,>=2.13.0 in /root/miniconda3/envs/value_agg/lib/python3.12/site-packages (from rich>=12.3.0
+->typer->transformers) (2.19.2)
+Requirement already satisfied: mdurl~=0.1 in /root/miniconda3/envs/value_agg/lib/python3.12/site-packages (from markdown-it-py>=2.2.0->ri
+ch>=12.3.0->typer->transformers) (0.1.2)
+Installing collected packages: shellingham, hf-xet, annotated-doc, typer, huggingface-hub, tokenizers, transformers
+  Attempting uninstall: hf-xet
+    Found existing installation: hf-xet 1.2.0
+    Uninstalling hf-xet-1.2.0:
+      Successfully uninstalled hf-xet-1.2.0
+  Attempting uninstall: huggingface-hub
+    Found existing installation: huggingface-hub 0.36.0
+    Uninstalling huggingface-hub-0.36.0:
+      Successfully uninstalled huggingface-hub-0.36.0
+  Attempting uninstall: tokenizers
+    Found existing installation: tokenizers 0.21.4
+    Uninstalling tokenizers-0.21.4:
+      Successfully uninstalled tokenizers-0.21.4
+  Attempting uninstall: transformers
+    Found existing installation: transformers 4.51.0
+    Uninstalling transformers-4.51.0:
+      Successfully uninstalled transformers-4.51.0
+ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source o
+f the following dependency conflicts.
+sentence-transformers 5.1.2 requires transformers<5.0.0,>=4.41.0, but you have transformers 5.3.0 which is incompatible.
+Successfully installed annotated-doc-0.0.4 hf-xet-1.4.2 huggingface-hub-1.7.2 shellingham-1.5.4 tokenizers-0.22.2 transformers-5.3.0 type
+r-0.24.1
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possi
+bly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --
+root-user-action option if you know what you are doing and want to suppress this warning.
+(value_agg) root@autodl-container-65f3418573-59bbff33:~/mydata/value_aggregation# clear
+(value_agg) root@autodl-container-65f3418573-59bbff33:~/mydata/value_aggregation# bash ./run_va_gather.sh
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated.
+Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that in
+stalled pynvml for you.
+  import pynvml  # type: ignore[import]
+[2026-03-25 19:44:08,044] [WARNING] [runner.py:232:fetch_hostfile] Unable to find hostfile, will proceed with training with local resourc
+es only.
+[2026-03-25 19:44:08,044] [INFO] [runner.py:630:main] cmd = /root/miniconda3/envs/value_agg/bin/python3.12 -u -m deepspeed.launcher.launc
+h --world_info=eyJsb2NhbGhvc3QiOiBbMCwgMV19 --master_addr=127.0.0.1 --master_port=29500 --enable_each_rank_log=None --log_level=info va_t
+rain.py --train_batch_size 1024 --path /root/autodl-tmp/dataset
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated.
+Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that in
+stalled pynvml for you.
+  import pynvml  # type: ignore[import]
+[2026-03-25 19:44:13,483] [INFO] [launch.py:162:main] WORLD INFO DICT: {'localhost': [0, 1]}
+[2026-03-25 19:44:13,483] [INFO] [launch.py:168:main] nnodes=1, num_local_procs=2, node_rank=0
+[2026-03-25 19:44:13,483] [INFO] [launch.py:179:main] global_rank_mapping=defaultdict(<class 'list'>, {'localhost': [0, 1]})
+[2026-03-25 19:44:13,483] [INFO] [launch.py:180:main] dist_world_size=2
+[2026-03-25 19:44:13,483] [INFO] [launch.py:184:main] Setting CUDA_VISIBLE_DEVICES=0,1
+[2026-03-25 19:44:13,483] [INFO] [launch.py:272:main] process 18039 spawned with command: ['/root/miniconda3/envs/value_agg/bin/python3.1
+2', '-u', 'va_train.py', '--local_rank=0', '--train_batch_size', '1024', '--path', '/root/autodl-tmp/dataset']
+[2026-03-25 19:44:13,484] [INFO] [launch.py:272:main] process 18040 spawned with command: ['/root/miniconda3/envs/value_agg/bin/python3.1
+2', '-u', 'va_train.py', '--local_rank=1', '--train_batch_size', '1024', '--path', '/root/autodl-tmp/dataset']
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated.
+Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that in
+stalled pynvml for you.
+  import pynvml  # type: ignore[import]
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated.
+Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that in
+stalled pynvml for you.
+  import pynvml  # type: ignore[import]
+Traceback (most recent call last):
+  File "/root/mydata/value_aggregation/va_train.py", line 19, in <module>
+    from models import Value_Aggregation_Gather, VAPPT_Gather, InforNCE_and_Eigenvalue
+  File "/root/mydata/value_aggregation/models.py", line 1, in <module>
+    from llama_model import VaLlamaForCausalLM
+  File "/root/mydata/value_aggregation/llama_model.py", line 41, in <module>
+    from transformers.utils import (
+ImportError: cannot import name 'LossKwargs' from 'transformers.utils' (/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/tran
+sformers/utils/__init__.py)
+Traceback (most recent call last):
+  File "/root/mydata/value_aggregation/va_train.py", line 19, in <module>
+    from models import Value_Aggregation_Gather, VAPPT_Gather, InforNCE_and_Eigenvalue
+  File "/root/mydata/value_aggregation/models.py", line 1, in <module>
+    from llama_model import VaLlamaForCausalLM
+  File "/root/mydata/value_aggregation/llama_model.py", line 41, in <module>
+    from transformers.utils import (
+ImportError: cannot import name 'LossKwargs' from 'transformers.utils' (/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/tran
+sformers/utils/__init__.py)
+[2026-03-25 19:44:21,485] [INFO] [launch.py:335:sigkill_handler] Killing subprocess 18039
+[2026-03-25 19:44:21,485] [INFO] [launch.py:335:sigkill_handler] Killing subprocess 18040
+[2026-03-25 19:44:21,582] [ERROR] [launch.py:341:sigkill_handler] ['/root/miniconda3/envs/value_agg/bin/python3.12', '-u', 'va_train.py',
+ '--local_rank=1', '--train_batch_size', '1024', '--path', '/root/autodl-tmp/dataset'] exits with return code = 1
+(value_agg) root@autodl-container-65f3418573-59bbff33:~/mydata/value_aggregation# pip install transformers==4.51.0Looking in indexes: htt
+p://mirrors.aliyun.com/pypi/simple
+Collecting transformers==4.51.0
+  Downloading http://mirrors.aliyun.com/pypi/packages/6f/db/7ee15028d5130929aa0b1b85bab6d8bafe806254d3b5c56c42a0066cceb8/transformers-4.5
+1.0-py3-none-any.whl (10.4 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 10.4/10.4 MB 15.9 MB/s  0:00:00
+Requirement already satisfied: filelock in /root/miniconda3/envs/value_agg/lib/python3.12/site-packages (from transformers==4.51.0) (3.20
+.0)
+Collecting huggingface-hub<1.0,>=0.30.0 (from transformers==4.51.0)
+  Downloading http://mirrors.aliyun.com/pypi/packages/a8/af/48ac8483240de756d2438c380746e7130d1c6f75802ef22f3c6d49982787/huggingface_hub-
+0.36.2-py3-none-any.whl (566 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 566.4/566.4 kB 11.0 MB/s  0:00:00
+Requirement already satisfied: numpy>=1.17 in /root/miniconda3/envs/value_agg/lib/python3.12/site-packages (from transformers==4.51.0) (1
+.26.4)
+Requirement already satisfied: packaging>=20.0 in /root/miniconda3/envs/value_agg/lib/python3.12/site-packages (from transformers==4.51.0
+) (25.0)
+Requirement already satisfied: pyyaml>=5.1 in /root/miniconda3/envs/value_agg/lib/python3.12/site-packages (from transformers==4.51.0) (6
+.0.3)
+Requirement already satisfied: regex!=2019.12.17 in /root/miniconda3/envs/value_agg/lib/python3.12/site-packages (from transformers==4.51
+.0) (2025.11.3)
+Requirement already satisfied: requests in /root/miniconda3/envs/value_agg/lib/python3.12/site-packages (from transformers==4.51.0) (2.32
+.5)
+Collecting tokenizers<0.22,>=0.21 (from transformers==4.51.0)
+  Downloading http://mirrors.aliyun.com/pypi/packages/f2/90/273b6c7ec78af547694eddeea9e05de771278bd20476525ab930cecaf7d8/tokenizers-0.21.
+4-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (3.1 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3.1/3.1 MB 16.0 MB/s  0:00:00
+Requirement already satisfied: safetensors>=0.4.3 in /root/miniconda3/envs/value_agg/lib/python3.12/site-packages (from transformers==4.5
+1.0) (0.6.2)
+Requirement already satisfied: tqdm>=4.27 in /root/miniconda3/envs/value_agg/lib/python3.12/site-packages (from transformers==4.51.0) (4.
+67.1)
+Requirement already satisfied: fsspec>=2023.5.0 in /root/miniconda3/envs/value_agg/lib/python3.12/site-packages (from huggingface-hub<1.0
+,>=0.30.0->transformers==4.51.0) (2025.10.0)
+Requirement already satisfied: hf-xet<2.0.0,>=1.1.3 in /root/miniconda3/envs/value_agg/lib/python3.12/site-packages (from huggingface-hub
+<1.0,>=0.30.0->transformers==4.51.0) (1.4.2)
+Requirement already satisfied: typing-extensions>=3.7.4.3 in /root/miniconda3/envs/value_agg/lib/python3.12/site-packages (from huggingfa
+ce-hub<1.0,>=0.30.0->transformers==4.51.0) (4.15.0)
+Requirement already satisfied: charset_normalizer<4,>=2 in /root/miniconda3/envs/value_agg/lib/python3.12/site-packages (from requests->t
+ransformers==4.51.0) (3.4.4)
+Requirement already satisfied: idna<4,>=2.5 in /root/miniconda3/envs/value_agg/lib/python3.12/site-packages (from requests->transformers=
+=4.51.0) (3.11)
+Requirement already satisfied: urllib3<3,>=1.21.1 in /root/miniconda3/envs/value_agg/lib/python3.12/site-packages (from requests->transfo
+rmers==4.51.0) (2.5.0)
+Requirement already satisfied: certifi>=2017.4.17 in /root/miniconda3/envs/value_agg/lib/python3.12/site-packages (from requests->transfo
+rmers==4.51.0) (2025.11.12)
+Installing collected packages: huggingface-hub, tokenizers, transformers
+  Attempting uninstall: huggingface-hub
+    Found existing installation: huggingface_hub 1.7.2
+    Uninstalling huggingface_hub-1.7.2:
+      Successfully uninstalled huggingface_hub-1.7.2
+  Attempting uninstall: tokenizers
+    Found existing installation: tokenizers 0.22.2
+    Uninstalling tokenizers-0.22.2:
+      Successfully uninstalled tokenizers-0.22.2
+  Attempting uninstall: transformers
+    Found existing installation: transformers 5.3.0
+    Uninstalling transformers-5.3.0:
+      Successfully uninstalled transformers-5.3.0
+Successfully installed huggingface-hub-0.36.2 tokenizers-0.21.4 transformers-4.51.0
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possi
+bly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --
+root-user-action option if you know what you are doing and want to suppress this warning.
+(value_agg) root@autodl-container-65f3418573-59bbff33:~/mydata/value_aggregation# bash ./run_va_gather.sh
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated.
+Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that in
+stalled pynvml for you.
+  import pynvml  # type: ignore[import]
+[2026-03-25 19:46:48,149] [WARNING] [runner.py:232:fetch_hostfile] Unable to find hostfile, will proceed with training with local resourc
+es only.
+[2026-03-25 19:46:48,149] [INFO] [runner.py:630:main] cmd = /root/miniconda3/envs/value_agg/bin/python3.12 -u -m deepspeed.launcher.launc
+h --world_info=eyJsb2NhbGhvc3QiOiBbMCwgMV19 --master_addr=127.0.0.1 --master_port=29500 --enable_each_rank_log=None --log_level=info va_t
+rain.py --train_batch_size 1024 --path /root/autodl-tmp/dataset
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated.
+Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that in
+stalled pynvml for you.
+  import pynvml  # type: ignore[import]
+[2026-03-25 19:46:53,093] [INFO] [launch.py:162:main] WORLD INFO DICT: {'localhost': [0, 1]}
+[2026-03-25 19:46:53,093] [INFO] [launch.py:168:main] nnodes=1, num_local_procs=2, node_rank=0
+[2026-03-25 19:46:53,093] [INFO] [launch.py:179:main] global_rank_mapping=defaultdict(<class 'list'>, {'localhost': [0, 1]})
+[2026-03-25 19:46:53,093] [INFO] [launch.py:180:main] dist_world_size=2
+[2026-03-25 19:46:53,093] [INFO] [launch.py:184:main] Setting CUDA_VISIBLE_DEVICES=0,1
+[2026-03-25 19:46:53,093] [INFO] [launch.py:272:main] process 19878 spawned with command: ['/root/miniconda3/envs/value_agg/bin/python3.1
+2', '-u', 'va_train.py', '--local_rank=0', '--train_batch_size', '1024', '--path', '/root/autodl-tmp/dataset']
+[2026-03-25 19:46:53,094] [INFO] [launch.py:272:main] process 19879 spawned with command: ['/root/miniconda3/envs/value_agg/bin/python3.1
+2', '-u', 'va_train.py', '--local_rank=1', '--train_batch_size', '1024', '--path', '/root/autodl-tmp/dataset']
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated.
+Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that in
+stalled pynvml for you.
+  import pynvml  # type: ignore[import]
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated.
+Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that in
+stalled pynvml for you.
+  import pynvml  # type: ignore[import]
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/transformers/models/auto/tokenization_auto.py:897: FutureWarning: The `use_a
+uth_token` argument is deprecated and will be removed in v5 of Transformers. Please use `token` instead.
+  warnings.warn(
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/transformers/models/auto/tokenization_auto.py:897: FutureWarning: The `use_a
+uth_token` argument is deprecated and will be removed in v5 of Transformers. Please use `token` instead.
+  warnings.warn(
+Loading raw data:   0%|                                                                    | 0/14 [00:00<?, ?it/s]allnli.jsonl
+Loading raw data:   7%|████▎                                                       | 1/14 [00:00<00:07,  1.64it/s]dureader.jsonl
+Loading raw data:   0%|                                                                    | 0/14 [00:00<?, ?it/s]allnli.jsonl
+Loading raw data:   7%|████▎                                                       | 1/14 [00:00<00:07,  1.74it/s]dureader.jsonl
+Loading raw data:  14%|████████▌                                                   | 2/14 [00:02<00:12,  1.08s/it]eli5_question_answer.js
+onl
+Loading raw data:  21%|████████████▊                                               | 3/14 [00:02<00:07,  1.56it/s]fever.jsonl
+Loading raw data:  14%|████████▌                                                   | 2/14 [00:01<00:12,  1.04s/it]eli5_question_answer.js
+onl
+Loading raw data:  21%|████████████▊                                               | 3/14 [00:02<00:06,  1.61it/s]fever.jsonl
+Loading raw data:  29%|█████████████████▏                                          | 4/14 [00:03<00:07,  1.35it/s]hotpot_qa.jsonl
+Loading raw data:  36%|█████████████████████▍                                      | 5/14 [00:03<00:05,  1.51it/s]miracl.jsonl
+Loading raw data:  29%|█████████████████▏                                          | 4/14 [00:02<00:07,  1.38it/s]hotpot_qa.jsonl
+Loading raw data:  43%|█████████████████████████▋                                  | 6/14 [00:04<00:04,  1.68it/s]mrtydi.jsonl
+Loading raw data:  36%|█████████████████████▍                                      | 5/14 [00:03<00:05,  1.57it/s]miracl.jsonl
+Loading raw data:  50%|██████████████████████████████                              | 7/14 [00:04<00:04,  1.61it/s]msmarco_document.jsonl
+Loading raw data:  43%|█████████████████████████▋                                  | 6/14 [00:03<00:04,  1.71it/s]mrtydi.jsonl
+Loading raw data:  50%|██████████████████████████████                              | 7/14 [00:04<00:04,  1.61it/s]msmarco_document.jsonl
+Loading raw data:  57%|██████████████████████████████████▎                         | 8/14 [00:07<00:08,  1.36s/it]msmarco_passage.jsonl
+Loading raw data:  57%|██████████████████████████████████▎                         | 8/14 [00:07<00:08,  1.36s/it]msmarco_passage.jsonl
+Loading raw data:  64%|██████████████████████████████████████▌                     | 9/14 [00:08<00:06,  1.23s/it]nq.jsonl
+Loading raw data:  71%|██████████████████████████████████████████▏                | 10/14 [00:09<00:04,  1.03s/it]quora_duplicates.jsonl
+Loading raw data:  64%|██████████████████████████████████████▌                     | 9/14 [00:08<00:06,  1.22s/it]nq.jsonl
+Loading raw data:  79%|██████████████████████████████████████████████▎            | 11/14 [00:09<00:02,  1.28it/s]squad.jsonl
+Loading raw data:  71%|██████████████████████████████████████████▏                | 10/14 [00:09<00:04,  1.03s/it]quora_duplicates.jsonl
+Loading raw data:  86%|██████████████████████████████████████████████████▌        | 12/14 [00:09<00:01,  1.39it/s]t2ranking.jsonl
+Loading raw data:  79%|██████████████████████████████████████████████▎            | 11/14 [00:09<00:02,  1.28it/s]squad.jsonl
+Loading raw data:  86%|██████████████████████████████████████████████████▌        | 12/14 [00:09<00:01,  1.39it/s]t2ranking.jsonl
+Loading raw data:  93%|██████████████████████████████████████████████████████▊    | 13/14 [00:13<00:01,  1.50s/it]trivia_qa.jsonl
+Loading raw data:  93%|██████████████████████████████████████████████████████▊    | 13/14 [00:13<00:01,  1.49s/it]trivia_qa.jsonl
+Loading raw data: 100%|███████████████████████████████████████████████████████████| 14/14 [00:14<00:00,  1.06s/it]
+Loading raw data: 100%|███████████████████████████████████████████████████████████| 14/14 [00:14<00:00,  1.05s/it]
+随机种子已设置为 2025
+随机种子已设置为 2025
+Map: 100%|█████████████████████████████████████████████████████| 1024000/1024000 [10:01<00:00, 1701.48 examples/s]
+Map: 100%|█████████████████████████████████████████████████████| 1024000/1024000 [10:01<00:00, 1907.21 examples/s]随机种子已设置为 2025
+Map: 100%|█████████████████████████████████████████████████████| 1024000/1024000 [10:01<00:00, 1703.26 examples/s]
+随机种子已设置为 2025
+Map: 100%|███████████████████████████████████████████████████████████| 5409/5409 [00:01<00:00, 3031.95 examples/s]
+Map:  95%|███████████████████████████████████████████████████████▊   | 5120/5409 [00:01<00:00, 2979.50 examples/s]/root/miniconda3/envs/v
+alue_agg/lib/python3.12/site-packages/transformers/models/auto/auto_factory.py:476: FutureWarning: The `use_auth_token` argument is depre
+cated and will be removed in v5 of Transformers. Please use `token` instead.
+  warnings.warn(
+Map: 100%|███████████████████████████████████████████████████████████| 5409/5409 [00:01<00:00, 2923.68 examples/s]
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/transformers/models/auto/auto_factory.py:476: FutureWarning: The `use_auth_t
+oken` argument is deprecated and will be removed in v5 of Transformers. Please use `token` instead.
+  warnings.warn(
+Traceback (most recent call last):
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/transformers/models/auto/configuration_auto.py", line 1129, in from_
+pretrained
+    config_class = CONFIG_MAPPING[config_dict["model_type"]]
+                   ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/transformers/models/auto/configuration_auto.py", line 831, in __geti
+tem__
+    raise KeyError(key)
+KeyError: 'qwen3_5'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/root/mydata/value_aggregation/va_train.py", line 548, in <module>
+    model = InforNCE_and_Eigenvalue(training_args.local_rank, model_args.model_name)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/mydata/value_aggregation/models.py", line 424, in __init__
+    self.model = AutoModelForCausalLM.from_pretrained(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/transformers/models/auto/auto_factory.py", line 531, in from_pretrai
+ned
+    config, kwargs = AutoConfig.from_pretrained(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/transformers/models/auto/configuration_auto.py", line 1131, in from_
+pretrained
+    raise ValueError(
+ValueError: The checkpoint you are trying to load has model type `qwen3_5` but Transformers does not recognize this architecture. This co
+uld be because of an issue with the checkpoint, or because your version of Transformers is out of date.
+
+You can update Transformers with the command `pip install --upgrade transformers`. If this does not work, and the checkpoint is very new,
+ then there may not be a release version that supports this model yet. In this case, you can get the most up-to-date code by installing T
+ransformers from source with the command `pip install git+https://github.com/huggingface/transformers.git`
+Traceback (most recent call last):
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/transformers/models/auto/configuration_auto.py", line 1129, in from_
+pretrained
+    config_class = CONFIG_MAPPING[config_dict["model_type"]]
+                   ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/transformers/models/auto/configuration_auto.py", line 831, in __geti
+tem__
+    raise KeyError(key)
+KeyError: 'qwen3_5'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/root/mydata/value_aggregation/va_train.py", line 548, in <module>
+    model = InforNCE_and_Eigenvalue(training_args.local_rank, model_args.model_name)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/mydata/value_aggregation/models.py", line 424, in __init__
+    self.model = AutoModelForCausalLM.from_pretrained(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/transformers/models/auto/auto_factory.py", line 531, in from_pretrai
+ned
+    config, kwargs = AutoConfig.from_pretrained(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/transformers/models/auto/configuration_auto.py", line 1131, in from_
+pretrained
+    raise ValueError(
+ValueError: The checkpoint you are trying to load has model type `qwen3_5` but Transformers does not recognize this architecture. This co
+uld be because of an issue with the checkpoint, or because your version of Transformers is out of date.
+
+You can update Transformers with the command `pip install --upgrade transformers`. If this does not work, and the checkpoint is very new,
+ then there may not be a release version that supports this model yet. In this case, you can get the most up-to-date code by installing T
+ransformers from source with the command `pip install git+https://github.com/huggingface/transformers.git`
+[2026-03-25 19:57:49,171] [INFO] [launch.py:335:sigkill_handler] Killing subprocess 19878
+[2026-03-25 19:57:49,172] [INFO] [launch.py:335:sigkill_handler] Killing subprocess 19879
+[2026-03-25 19:57:49,176] [ERROR] [launch.py:341:sigkill_handler] ['/root/miniconda3/envs/value_agg/bin/python3.12', '-u', 'va_train.py',
+ '--local_rank=1', '--train_batch_size', '1024', '--path', '/root/autodl-tmp/dataset'] exits with return code = 1
+(value_agg) root@autodl-container-65f3418573-59bbff33:~/mydata/value_aggregation# clear
+(value_agg) root@autodl-container-65f3418573-59bbff33:~/mydata/value_aggregation# bash ./run_va_gather.sh
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated.
+Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that in
+stalled pynvml for you.
+  import pynvml  # type: ignore[import]
+[2026-03-25 19:58:49,280] [WARNING] [runner.py:232:fetch_hostfile] Unable to find hostfile, will proceed with training with local resourc
+es only.
+[2026-03-25 19:58:49,280] [INFO] [runner.py:630:main] cmd = /root/miniconda3/envs/value_agg/bin/python3.12 -u -m deepspeed.launcher.launc
+h --world_info=eyJsb2NhbGhvc3QiOiBbMCwgMV19 --master_addr=127.0.0.1 --master_port=29500 --enable_each_rank_log=None --log_level=info va_t
+rain.py --train_batch_size 1024 --path /root/autodl-tmp/dataset
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated.
+Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that in
+stalled pynvml for you.
+  import pynvml  # type: ignore[import]
+[2026-03-25 19:58:54,221] [INFO] [launch.py:162:main] WORLD INFO DICT: {'localhost': [0, 1]}
+[2026-03-25 19:58:54,221] [INFO] [launch.py:168:main] nnodes=1, num_local_procs=2, node_rank=0
+[2026-03-25 19:58:54,221] [INFO] [launch.py:179:main] global_rank_mapping=defaultdict(<class 'list'>, {'localhost': [0, 1]})
+[2026-03-25 19:58:54,221] [INFO] [launch.py:180:main] dist_world_size=2
+[2026-03-25 19:58:54,221] [INFO] [launch.py:184:main] Setting CUDA_VISIBLE_DEVICES=0,1
+[2026-03-25 19:58:54,222] [INFO] [launch.py:272:main] process 26787 spawned with command: ['/root/miniconda3/envs/value_agg/bin/python3.1
+2', '-u', 'va_train.py', '--local_rank=0', '--train_batch_size', '1024', '--path', '/root/autodl-tmp/dataset']
+[2026-03-25 19:58:54,222] [INFO] [launch.py:272:main] process 26788 spawned with command: ['/root/miniconda3/envs/value_agg/bin/python3.1
+2', '-u', 'va_train.py', '--local_rank=1', '--train_batch_size', '1024', '--path', '/root/autodl-tmp/dataset']
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated.
+Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that in
+stalled pynvml for you.
+  import pynvml  # type: ignore[import]
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated.
+Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that in
+stalled pynvml for you.
+  import pynvml  # type: ignore[import]
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/transformers/models/auto/tokenization_auto.py:897: FutureWarning: The `use_a
+uth_token` argument is deprecated and will be removed in v5 of Transformers. Please use `token` instead.
+  warnings.warn(
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/transformers/models/auto/tokenization_auto.py:897: FutureWarning: The `use_a
+uth_token` argument is deprecated and will be removed in v5 of Transformers. Please use `token` instead.
+  warnings.warn(
+tokenizer_config.json: 9.73kB [00:00, 23.7kB/s]
+vocab.json: 2.78MB [00:01, 1.94MB/s]
+merges.txt: 1.10MB [00:00, 1.60MB/s]'(ReadTimeoutError("HTTPSConnectionPool(host='hf-mirror.com', port=443): Read timed out. (read timeou
+t=10)"), '(Request ID: 5e9882dc-0018-43fd-aa8a-2c0b9c39e02c)')' thrown while requesting HEAD https://hf-mirror.com/api/resolve-cache/mode
+ls/Qwen/Qwen3-0.6B/c1899de289a04d12100db370d81485cdf75e47ca/merges.txt
+Retrying in 1s [Retry 1/5].
+Error while downloading from https://hf-mirror.com/api/resolve-cache/models/Qwen/Qwen3-0.6B/c1899de289a04d12100db370d81485cdf75e47ca/merg
+es.txt: HTTPSConnectionPool(host='hf-mirror.com', port=443): Read timed out.
+Trying to resume download...
+merges.txt: 1.38MB [00:20, 1.60MB/s]'(ReadTimeoutError("HTTPSConnectionPool(host='hf-mirror.com', port=443): Read timed out. (read timeou
+t=10)"), '(Request ID: 3a2c3837-7540-4730-ae16-c81196627566)')' thrown while requesting GET https://hf-mirror.com/api/resolve-cache/model
+s/Qwen/Qwen3-0.6B/c1899de289a04d12100db370d81485cdf75e47ca/merges.txt
+Retrying in 1s [Retry 1/5].
+'(ReadTimeoutError("HTTPSConnectionPool(host='hf-mirror.com', port=443): Read timed out. (read timeout=10)"), '(Request ID: 14288392-731a
+-4e3d-af8c-8844ede872fb)')' thrown while requesting GET https://hf-mirror.com/api/resolve-cache/models/Qwen/Qwen3-0.6B/c1899de289a04d1210
+0db370d81485cdf75e47ca/merges.txt
+Retrying in 2s [Retry 2/5].
+merges.txt: 1.67MB [00:00, 372kB/s]
+merges.txt: 1.38MB [00:37, 37.1kB/s]
+tokenizer.json:   0%|                                                                 | 0.00/11.4M [00:00<?, ?B/s]Error while downloading
+ from https://cas-bridge.xethub.hf.co/xet-bridge-us/680da718233834890aa01f51/6aec39639a0a2d1ca966356b8c2b8426a484f80ff80731f44fa848204071
+3bdf?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=cas%2F20260325%2Fus-east-1%2Fs3%2Faws4_reque
+st&X-Amz-Date=20260325T115239Z&X-Amz-Expires=3600&X-Amz-Signature=c6fd459f551b0ee0e76dc421fe145ce9d28c50e97a07beaa643c2f84d679a0d8&X-Amz-
+SignedHeaders=host&X-Xet-Cas-Uid=62d35f3ceaf3858ce253ab7a&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27tokenizer.json%3B
++filename%3D%22tokenizer.json%22%3B&response-content-type=application%2Fjson&x-amz-checksum-mode=ENABLED&x-id=GetObject&Expires=177444315
+9&Policy=eyJTdGF0ZW1lbnQiOlt7IkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiQVdTOkVwb2NoVGltZSI6MTc3NDQ0MzE1OX19LCJSZXNvdXJjZSI6Imh0dHBzOi8vY2Fz
+LWJyaWRnZS54ZXRodWIuaGYuY28veGV0LWJyaWRnZS11cy82ODBkYTcxODIzMzgzNDg5MGFhMDFmNTEvNmFlYzM5NjM5YTBhMmQxY2E5NjYzNTZiOGMyYjg0MjZhNDg0ZjgwZmY4M
+DczMWY0NGZhODQ4MjA0MDcxM2JkZioifV19&Signature=P%7EKEYnh95AmSD%7E-6bS4COnbE33Ka8%7EL16z%7E7g55OpFl4DG8HPmVvgHXIUDCPLbOESN3K5Lh0FGKrgoPRji3
+mB5M6-jL6T2cd%7E2O3lDPbaKm30%7ElhPd-qFJ%7EFLezSnQQS0LhKNDHgoDI7IhX7Lk%7EYzNXG61ZazVOgMktHKKMLNljy5yPZcTRaul87yknfVkf5KNs67DbMee9LGXKb4vIo
+6HikEJUM2414F4SXA7T23GH6Td52-AHNxVKbrJomGezC9P4R27SmPLvcd6Ni-Te4MtbDlen5dXMl66Dr5OTVFPKAVewze5N2jvlBzbxVSM%7EWwoqV2MvQ5Lq6LP0tfnqVSg__&Ke
+y-Pair-Id=K2L8F4GPSG1IFC: HTTPSConnectionPool(host='cas-bridge.xethub.hf.co', port=443): Read timed out.
+Trying to resume download...
+                                                                                                                 ^\./run_va_gather.sh: li
+ne 5: 26301 Quit                    deepspeed --num_gpus 2 va_train.py --train_batch_size 1024 --path /root/autodl-tmp/dataset
+(value_agg) root@autodl-container-65f3418573-59bbff33:~/mydata/value_aggregation# source /etc/network_turbo
+设置成功
+注意：仅限于学术用途和加速访问github/huggingface，不承诺稳定性保证
+(value_agg) root@autodl-container-65f3418573-59bbff33:~/mydata/value_aggregation# bash ./run_va_gather.sh
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated.
+Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that in
+stalled pynvml for you.
+  import pynvml  # type: ignore[import]
+[2026-03-25 20:03:10,159] [WARNING] [runner.py:232:fetch_hostfile] Unable to find hostfile, will proceed with training with local resourc
+es only.
+[2026-03-25 20:03:10,159] [INFO] [runner.py:630:main] cmd = /root/miniconda3/envs/value_agg/bin/python3.12 -u -m deepspeed.launcher.launc
+h --world_info=eyJsb2NhbGhvc3QiOiBbMCwgMV19 --master_addr=127.0.0.1 --master_port=29500 --enable_each_rank_log=None --log_level=info va_t
+rain.py --train_batch_size 1024 --path /root/autodl-tmp/dataset
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated.
+Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that in
+stalled pynvml for you.
+  import pynvml  # type: ignore[import]
+[2026-03-25 20:03:15,232] [INFO] [launch.py:162:main] WORLD INFO DICT: {'localhost': [0, 1]}
+[2026-03-25 20:03:15,232] [INFO] [launch.py:168:main] nnodes=1, num_local_procs=2, node_rank=0
+[2026-03-25 20:03:15,232] [INFO] [launch.py:179:main] global_rank_mapping=defaultdict(<class 'list'>, {'localhost': [0, 1]})
+[2026-03-25 20:03:15,232] [INFO] [launch.py:180:main] dist_world_size=2
+[2026-03-25 20:03:15,232] [INFO] [launch.py:184:main] Setting CUDA_VISIBLE_DEVICES=0,1
+[2026-03-25 20:03:15,232] [INFO] [launch.py:272:main] process 29174 spawned with command: ['/root/miniconda3/envs/value_agg/bin/python3.1
+2', '-u', 'va_train.py', '--local_rank=0', '--train_batch_size', '1024', '--path', '/root/autodl-tmp/dataset']
+[2026-03-25 20:03:15,233] [INFO] [launch.py:272:main] process 29175 spawned with command: ['/root/miniconda3/envs/value_agg/bin/python3.1
+2', '-u', 'va_train.py', '--local_rank=1', '--train_batch_size', '1024', '--path', '/root/autodl-tmp/dataset']
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated.
+Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that in
+stalled pynvml for you.
+  import pynvml  # type: ignore[import]
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated.
+Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that in
+stalled pynvml for you.
+  import pynvml  # type: ignore[import]
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/transformers/models/auto/tokenization_auto.py:897: FutureWarning: The `use_a
+uth_token` argument is deprecated and will be removed in v5 of Transformers. Please use `token` instead.
+  warnings.warn(
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/transformers/models/auto/tokenization_auto.py:897: FutureWarning: The `use_a
+uth_token` argument is deprecated and will be removed in v5 of Transformers. Please use `token` instead.
+  warnings.warn(
+'(ReadTimeoutError("HTTPSConnectionPool(host='cas-bridge.xethub.hf.co', port=443): Read timed out. (read timeout=10)"), '(Request ID: aa7
+eb3e8-7dbc-44d5-9b0a-becd48fd602a)')' thrown while requesting GET https://cas-bridge.xethub.hf.co/xet-bridge-us/680da718233834890aa01f51/
+6aec39639a0a2d1ca966356b8c2b8426a484f80ff80731f44fa8482040713bdf?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X
+-Amz-Credential=cas%2F20260325%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20260325T120322Z&X-Amz-Expires=3600&X-Amz-Signature=afbeec08a47
+6696a91b43f7561cf6dfe45207ba1007b9af74125be9c013a2a9a&X-Amz-SignedHeaders=host&X-Xet-Cas-Uid=64bf88c8ae436c88135984b9&response-content-di
+sposition=inline%3B+filename*%3DUTF-8%27%27tokenizer.json%3B+filename%3D%22tokenizer.json%22%3B&response-content-type=application%2Fjson&
+x-amz-checksum-mode=ENABLED&x-id=GetObject&Expires=1774443802&Policy=eyJTdGF0ZW1lbnQiOlt7IkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiQVdTOkVw
+b2NoVGltZSI6MTc3NDQ0MzgwMn19LCJSZXNvdXJjZSI6Imh0dHBzOi8vY2FzLWJyaWRnZS54ZXRodWIuaGYuY28veGV0LWJyaWRnZS11cy82ODBkYTcxODIzMzgzNDg5MGFhMDFmN
+TEvNmFlYzM5NjM5YTBhMmQxY2E5NjYzNTZiOGMyYjg0MjZhNDg0ZjgwZmY4MDczMWY0NGZhODQ4MjA0MDcxM2JkZioifV19&Signature=oQvNOdNemLlc3%7Ea6W1ClHf9p5CSoJ
+Anb8rCDT%7EhkUVNDVgNCtWQYyLHU6uF%7E0kND%7EFPkfKsEPWU7lBIEY7TNs2P1oJLXIhtJTcFD%7EksZrlPWNO9HK89SojkbCj5DBMU1O-L9xTJcHfWz6dwUuxiiuqF8aBZirw
+gRpuYZkcJMTrHuCIUkhgiojUTd3MNv0kUzY-OOD6pG0%7E8et2hqaIcXydRTeTh9DtMFRy7SQG-MvYAdRThw9nz4Gktn3n-OoE5-UBfxACgIsH2wPjEBYoFmd0MIXRyiS8Y4T1xH5
+00ZK1TeqvFcxml6xDDs3sRPd8WiqOJDX5IHnJIKRnPVex1qFA__&Key-Pair-Id=K2L8F4GPSG1IFC
+Retrying in 1s [Retry 1/5].
+tokenizer.json: 100%|████████████████████████████████████████████████████████| 11.4M/11.4M [00:07<00:00, 1.59MB/s]
+Loading raw data:   0%|                                                                    | 0/14 [00:00<?, ?it/s]allnli.jsonl
+Loading raw data:   0%|                                                                    | 0/14 [00:00<?, ?it/s]allnli.jsonl
+Loading raw data:   7%|████▎                                                       | 1/14 [00:00<00:07,  1.67it/s]dureader.jsonl
+Loading raw data:   7%|████▎                                                       | 1/14 [00:00<00:07,  1.64it/s]dureader.jsonl
+Loading raw data:  14%|████████▌                                                   | 2/14 [00:02<00:12,  1.07s/it]eli5_question_answer.js
+onl
+Loading raw data:  14%|████████▌                                                   | 2/14 [00:01<00:12,  1.06s/it]eli5_question_answer.js
+onl
+Loading raw data:  21%|████████████▊                                               | 3/14 [00:02<00:06,  1.57it/s]fever.jsonl
+Loading raw data:  21%|████████████▊                                               | 3/14 [00:02<00:06,  1.58it/s]fever.jsonl
+Loading raw data:  29%|█████████████████▏                                          | 4/14 [00:02<00:07,  1.37it/s]hotpot_qa.jsonl
+Loading raw data:  29%|█████████████████▏                                          | 4/14 [00:02<00:07,  1.38it/s]hotpot_qa.jsonl
+Loading raw data:  36%|█████████████████████▍                                      | 5/14 [00:03<00:05,  1.57it/s]miracl.jsonl
+Loading raw data:  36%|█████████████████████▍                                      | 5/14 [00:03<00:05,  1.57it/s]miracl.jsonl
+Loading raw data:  43%|█████████████████████████▋                                  | 6/14 [00:03<00:04,  1.73it/s]mrtydi.jsonl
+Loading raw data:  43%|█████████████████████████▋                                  | 6/14 [00:03<00:04,  1.73it/s]mrtydi.jsonl
+Loading raw data:  50%|██████████████████████████████                              | 7/14 [00:04<00:04,  1.64it/s]msmarco_document.jsonl
+Loading raw data:  50%|██████████████████████████████                              | 7/14 [00:04<00:04,  1.63it/s]msmarco_document.jsonl
+Loading raw data:  57%|██████████████████████████████████▎                         | 8/14 [00:07<00:07,  1.33s/it]msmarco_passage.jsonl
+Loading raw data:  57%|██████████████████████████████████▎                         | 8/14 [00:07<00:07,  1.33s/it]msmarco_passage.jsonl
+Loading raw data:  64%|██████████████████████████████████████▌                     | 9/14 [00:08<00:05,  1.20s/it]nq.jsonl
+Loading raw data:  64%|██████████████████████████████████████▌                     | 9/14 [00:08<00:05,  1.20s/it]nq.jsonl
+Loading raw data:  71%|██████████████████████████████████████████▏                | 10/14 [00:08<00:04,  1.01s/it]quora_duplicates.jsonl
+Loading raw data:  71%|██████████████████████████████████████████▏                | 10/14 [00:08<00:04,  1.00s/it]quora_duplicates.jsonl
+Loading raw data:  79%|██████████████████████████████████████████████▎            | 11/14 [00:09<00:02,  1.31it/s]squad.jsonl
+Loading raw data:  79%|██████████████████████████████████████████████▎            | 11/14 [00:09<00:02,  1.31it/s]squad.jsonl
+Loading raw data:  86%|██████████████████████████████████████████████████▌        | 12/14 [00:09<00:01,  1.42it/s]t2ranking.jsonl
+Loading raw data:  86%|██████████████████████████████████████████████████▌        | 12/14 [00:09<00:01,  1.42it/s]t2ranking.jsonl
+Loading raw data:  93%|██████████████████████████████████████████████████████▊    | 13/14 [00:12<00:01,  1.47s/it]trivia_qa.jsonl
+Loading raw data:  93%|██████████████████████████████████████████████████████▊    | 13/14 [00:12<00:01,  1.46s/it]trivia_qa.jsonl
+Loading raw data: 100%|███████████████████████████████████████████████████████████| 14/14 [00:14<00:00,  1.04s/it]
+Loading raw data: 100%|███████████████████████████████████████████████████████████| 14/14 [00:14<00:00,  1.04s/it]
+随机种子已设置为 2025
+随机种子已设置为 2025
+Map: 100%|█████████████████████████████████████████████████████| 1024000/1024000 [10:06<00:00, 1687.97 examples/s]
+Map:  99%|████████████████████████████████████████████████████▍| 1013760/1024000 [10:06<00:06, 1601.87 examples/s]随机种子已设置为 2025
+Map: 100%|███████████████████████████████████████████████████████████| 5409/5409 [00:01<00:00, 3247.99 examples/s]
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/transformers/models/auto/auto_factory.py:476: FutureWarning: The `use_auth_t
+oken` argument is deprecated and will be removed in v5 of Transformers. Please use `token` instead.
+  warnings.warn(
+config.json: 726B [00:00, 3.32MB/s]███████████████████████████▊| 1020928/1024000 [10:10<00:01, 1951.05 examples/s]
+Map: 100%|█████████████████████████████████████████████████████| 1024000/1024000 [10:11<00:00, 1674.08 examples/s]
+随机种子已设置为 2025
+Map: 100%|███████████████████████████████████████████████████████████| 5409/5409 [00:02<00:00, 2541.59 examples/s]
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/transformers/models/auto/auto_factory.py:476: FutureWarning: The `use_auth_t
+oken` argument is deprecated and will be removed in v5 of Transformers. Please model.safetensors:   1%|▎
+                 | 10.5M/1.50G [03:32<7:56:47, 52.2kB/s]^C[2026-03-25 20:24:46,166] [INFO] [launch.py:335:sigkill_handler] Killing subpro
+cess 29174                      model.safetensors:   1%|▎                                                  | 10.5M/1.50G [03:20<7:5
+Traceback (most recent call last):
+  File "/root/mydata/value_aggregation/va_train.py", line 548, in <module>
+    model = InforNCE_and_Eigenvalue(training_args.local_rank, model_args.model_name)
+model.safetensors:   1%|▎                                                 | 10.5M/1.50G [10:13<24:15:37, 17.1kB/s]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/mydata/value_aggregation/models.py", line 424, in __init__
+Traceback (most recent call last):
+  File "/root/mydata/value_aggregation/va_train.py", line 548, in <module>
+    self.model = AutoModelForCausalLM.from_pretrained(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/transformers/models/auto/auto_factory.py", line 571, in from_pretrai
+ned
+    model = InforNCE_and_Eigenvalue(training_args.local_rank, model_args.model_name)
+    return model_class.from_pretrained(
+            ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/transformers/modeling_utils.py", line 279, in _wrapper
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^return func(*args, **kwargs)^
+^^^^^^^^^^ ^ ^
+    File "/root/mydata/value_aggregation/models.py", line 424, in __init__
+       ^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/transformers/modeling_utils.py", line 4261, in from_pretrained
+    self.model = AutoModelForCausalLM.from_pretrained(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/transformers/models/auto/auto_factory.py", line 571, in from_pretrai
+ned
+    return model_class.from_pretrained(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/transformers/modeling_utils.py", line 279, in _wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+    checkpoint_files, sharded_metadata = _get_resolved_checkpoint_files(
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/transformers/modeling_utils.py", line 4261, in from_pretrained
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/transformers/modeling_utils.py", line 997, in _get_resolved_checkpoi
+nt_files
+    resolved_archive_file = cached_file(pretrained_model_name_or_path, filename, **cached_file_kwargs)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^checkpoint_files, sharded_metadata = _get_resolved_check
+point_files(^
+^^^^^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^
+      File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/transformers/utils/hub.py", line 266, in cached_file
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^file = cached_files(path_or_repo_id=path_or_repo_id, filenames=[filename], **kwargs)
+
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/transformers/modeling_utils.py", line 997, in _get_resolved_checkpoi
+nt_files
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^resolved_archive_file = cached_file(pretrained_model_name_or_path, filename, **cached_file_kwa
+rgs)^
+^^^^^^^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^  ^ ^ ^ ^ ^ ^ ^ ^ ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/transformers/utils/hub.py", line 424, in cached_files
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    hf_hub_download(  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/transformers/utils/hub.py", line 266, in cached_
+file
+
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/huggingface_hub/utils/_validators.py", line 114, in _inner_fn
+    file = cached_files(path_or_repo_id=path_or_repo_id, filenames=[filename], **kwargs)
+    return fn(*args, **kwargs)
+             ^ ^ ^ ^ ^ ^ ^ ^ ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/huggingface_hub/file_download.py", line 1014, in hf_hub_download
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/transformers/utils/hub.py", line 424, in cached_files
+    hf_hub_download(
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/huggingface_hub/utils/_validators.py", line 114, in _inner_fn
+    return _hf_hub_download_to_cache_dir(
+          return fn(*args, **kwargs)
+    ^^ ^  ^ ^ ^ ^ ^ ^ ^ ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/huggingface_hub/file_download.py", line 1014, in hf_hub_download
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/huggingface_hub/file_download.py", line 1174, in _hf_hub_download_to
+_cache_dir
+    return _hf_hub_download_to_cache_dir(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+with WeakFileLock(lock_path):
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/huggingface_hub/file_download.py", line 1175, in _hf_hub_download_to
+_cache_dir
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/contextlib.py", line 137, in __enter__
+    _download_to_tmp_and_move(
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/huggingface_hub/file_download.py", line 1742, in _download_to_tmp_an
+d_move
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/huggingface_hub/utils/_fixes.py", line 109, in WeakFileLock
+    http_get(
+      File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/huggingface_hub/file_download.py", line 500, in http_get
+lock.acquire(timeout=min(log_interval, timeout - elapsed_time) if timeout else log_interval)
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/filelock/_api.py", line 344, in acquire
+    for chunk in r.iter_content(chunk_size=constants.DOWNLOAD_CHUNK_SIZE):
+               time.sleep(poll_interval)
+     ^^^^^^KeyboardInterrupt^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/requests/models.py", line 820, in generate
+    yield from self.raw.stream(chunk_size, decode_content=True)
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/urllib3/response.py", line 1091, in stream
+    data = self.read(amt=amt, decode_content=decode_content)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/urllib3/response.py", line 980, in read
+    data = self._raw_read(amt)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/urllib3/response.py", line 904, in _raw_read
+    data = self._fp_read(amt, read1=read1) if not fp_closed else b""
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/urllib3/response.py", line 887, in _fp_read
+    return self._fp.read(amt) if amt is not None else self._fp.read()
+           ^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/http/client.py", line 484, in read
+    s = self.fp.read(amt)
+        ^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/socket.py", line 720, in readinto
+    return self._sock.recv_into(b)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/ssl.py", line 1251, in recv_into
+    return self.read(nbytes, buffer)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/ssl.py", line 1103, in read
+    return self._sslobj.read(len, buffer)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyboardInterrupt
+Traceback (most recent call last):
+  File "/root/miniconda3/envs/value_agg/bin/deepspeed", line 6, in <module>
+    main()
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/deepspeed/launcher/runner.py", line 646, in main
+    result.wait()
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/subprocess.py", line 1264, in wait
+    return self._wait(timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/subprocess.py", line 2053, in _wait
+    (pid, sts) = self._try_wait(0)
+                 ^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/subprocess.py", line 2011, in _try_wait
+    (pid, sts) = os.waitpid(self.pid, wait_flags)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyboardInterrupt
+^C[2026-03-25 20:24:46,649] [INFO] [launch.py:335:sigkill_handler] Killing subprocess 29174
+Exception ignored in atexit callback: <function shutdown_compile_workers at 0x7f22208862a0>
+Traceback (most recent call last):
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/torch/_inductor/async_compile.py", line 142, in shutdown_compile_wor
+kers
+    pool.shutdown()
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/torch/_inductor/compile_worker/subproc_pool.py", line 243, in shutdo
+wn
+    self.process.wait(300)
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/subprocess.py", line 1264, in wait
+    return self._wait(timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/subprocess.py", line 2047, in _wait
+    time.sleep(delay)
+KeyboardInterrupt:
+Exception ignored in atexit callback: <function shutdown_compile_workers at 0x7fb0cb842480>
+Traceback (most recent call last):
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/torch/_inductor/async_compile.py", line 142, in shutdown_compile_wor
+kers
+    pool.shutdown()
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/torch/_inductor/compile_worker/subproc_pool.py", line 243, in shutdo
+wn
+    self.process.wait(300)
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/subprocess.py", line 1264, in wait
+    return self._wait(timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/subprocess.py", line 2047, in _wait
+    time.sleep(delay)
+KeyboardInterrupt:
+^C[2026-03-25 20:24:47,534] [INFO] [launch.py:335:sigkill_handler] Killing subprocess 29174
+
+(value_agg) root@autodl-container-65f3418573-59bbff33:~/mydata/value_aggregation# [2026-03-25 20:24:48,203] [INFO] [launch.py:335:sigkill
+_handler] Killing subprocess 29175
+(value_agg) root@autodl-container-65f3418573-59bbff33:~/mydata/value_aggregation# [2026-03-25 20:24:49,512] [INFO] [launch.py:344:sigkill
+_handler] Main process received SIGINT, exiting
+(value_agg) root@autodl-container-65f3418573-59bbff33:~/mydata/value_aggregation# bash ./run_va_gather.sh
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated.
+Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that in
+stalled pynvml for you.
+  import pynvml  # type: ignore[import]
+^CTraceback (most recent call last):
+  File "/root/miniconda3/envs/value_agg/bin/deepspeed", line 3, in <module>
+    from deepspeed.launcher.runner import main
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/deepspeed/__init__.py", line 25, in <module>
+    from . import ops
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/deepspeed/ops/__init__.py", line 6, in <module>
+    from . import adam
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/deepspeed/ops/adam/__init__.py", line 6, in <module>
+    from .cpu_adam import DeepSpeedCPUAdam
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/deepspeed/ops/adam/cpu_adam.py", line 8, in <module>
+    from deepspeed.utils import logger
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/deepspeed/utils/__init__.py", line 10, in <module>
+    from .groups import *
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/deepspeed/utils/groups.py", line 28, in <module>
+    from deepspeed import comm as dist
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/deepspeed/comm/__init__.py", line 7, in <module>
+    from .comm import *
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/deepspeed/comm/comm.py", line 32, in <module>
+    from deepspeed.comm.ccl import CCLBackend
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/deepspeed/comm/ccl.py", line 11, in <module>
+    from deepspeed.ops.op_builder import NotImplementedBuilder
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/deepspeed/ops/op_builder/__init__.py", line 11, in <module>
+    from .builder import get_default_compute_capabilities, OpBuilder
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/deepspeed/ops/op_builder/builder.py", line 16, in <module>
+    import distutils.ccompiler
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1322, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 1262, in _find_spec
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/_distutils_hack/__init__.py", line 109, in find_spec
+    return method()
+           ^^^^^^^^
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/_distutils_hack/__init__.py", line 120, in spec_for_distutils
+    mod = importlib.import_module('setuptools._distutils')
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/importlib/__init__.py", line 90, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/setuptools/__init__.py", line 21, in <module>
+    import _distutils_hack.override  # noqa: F401
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/_distutils_hack/override.py", line 1, in <module>
+    __import__('_distutils_hack').do_override()
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/_distutils_hack/__init__.py", line 89, in do_override
+    ensure_local_distutils()
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/_distutils_hack/__init__.py", line 75, in ensure_local_distutils
+    core = importlib.import_module('distutils.core')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/importlib/__init__.py", line 90, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1375, in _gcd_import
+KeyboardInterrupt
+
+(value_agg) root@autodl-container-65f3418573-59bbff33:~/mydata/value_aggregation# ^C
+(value_agg) root@autodl-container-65f3418573-59bbff33:~/mydata/value_aggregation# ^C
+(value_agg) root@autodl-container-65f3418573-59bbff33:~/mydata/value_aggregation# python ../load_qwen.py
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated.
+Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that in
+stalled pynvml for you.
+  import pynvml  # type: ignore[import]
+config.json: 2.91kB [00:00, 15.9MB/s]
+Traceback (most recent call last):
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/transformers/models/auto/configuration_auto.py", line 1129, in from_
+pretrained
+    config_class = CONFIG_MAPPING[config_dict["model_type"]]
+                   ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/transformers/models/auto/configuration_auto.py", line 831, in __geti
+tem__
+    raise KeyError(key)
+KeyError: 'qwen3_5'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/root/mydata/value_aggregation/../load_qwen.py", line 5, in <module>
+    model = AutoModelForCausalLM.from_pretrained(
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/transformers/models/auto/auto_factory.py", line 531, in from_pretrai
+ned
+    config, kwargs = AutoConfig.from_pretrained(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/transformers/models/auto/configuration_auto.py", line 1131, in from_
+pretrained
+    raise ValueError(
+ValueError: The checkpoint you are trying to load has model type `qwen3_5` but Transformers does not recognize this architecture. This co
+uld be because of an issue with the checkpoint, or because your version of Transformers is out of date.
+
+You can update Transformers with the command `pip install --upgrade transformers`. If this does not work, and the checkpoint is very new,
+ then there may not be a release version that supports this model yet. In this case, you can get the most up-to-date code by installing T
+ransformers from source with the command `pip install git+https://github.com/huggingface/transformers.git`
+(value_agg) root@autodl-container-65f3418573-59bbff33:~/mydata/value_aggregation# ^C
+(value_agg) root@autodl-container-65f3418573-59bbff33:~/mydata/value_aggregation# ^C
+(value_agg) root@autodl-container-65f3418573-59bbff33:~/mydata/value_aggregation# ^C
+(value_agg) root@autodl-container-65f3418573-59bbff33:~/mydata/value_aggregation# python ../load_qwen.py
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated.
+Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that in
+stalled pynvml for you.
+  import pynvml  # type: ignore[import]
+config.json: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████
+████████████| 726/726 [00:00<00:00, 6.66MB/s]
+model.safetensors:   0%|
+                 | 0.00/1.50G [00:03<?, ?B/s]
+Traceback (most recent call last):
+  File "/root/mydata/value_aggregation/../load_qwen.py", line 5, in <module>
+    model = AutoModelForCausalLM.from_pretrained(
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/transformers/models/auto/auto_factory.py", line 571, in from_pretrai
+ned
+    return model_class.from_pretrained(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/transformers/modeling_utils.py", line 279, in _wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/transformers/modeling_utils.py", line 4261, in from_pretrained
+    checkpoint_files, sharded_metadata = _get_resolved_checkpoint_files(
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/transformers/modeling_utils.py", line 1100, in _get_resolved_checkpo
+int_files
+    raise EnvironmentError(
+OSError: Qwen/Qwen3-0.6B does not appear to have a file named pytorch_model.bin, model.safetensors, tf_model.h5, model.ckpt or flax_model
+.msgpack.
+Fatal Python error: _PyImport_Init: global import state already initialized
+Python runtime state: preinitialized
+
+Thread 0x00007f5f4ddd6740 (most recent call first):
+  <no Python frame>
+(value_agg) root@autodl-container-65f3418573-59bbff33:~/mydata/value_aggregation# python ../load_qwen.py
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated.
+Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that in
+stalled pynvml for you.
+  import pynvml  # type: ignore[import]
+model.safetensors:   0%|
+                 | 0.00/1.50G [00:03<?, ?B/s]
+Traceback (most recent call last):
+  File "/root/mydata/value_aggregation/../load_qwen.py", line 5, in <module>
+    model = AutoModelForCausalLM.from_pretrained(
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/transformers/models/auto/auto_factory.py", line 571, in from_pretrai
+ned
+    return model_class.from_pretrained(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/transformers/modeling_utils.py", line 279, in _wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/transformers/modeling_utils.py", line 4261, in from_pretrained
+    checkpoint_files, sharded_metadata = _get_resolved_checkpoint_files(
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/transformers/modeling_utils.py", line 1100, in _get_resolved_checkpo
+int_files
+    raise EnvironmentError(
+OSError: Qwen/Qwen3-0.6B does not appear to have a file named pytorch_model.bin, model.safetensors, tf_model.h5, model.ckpt or flax_model
+.msgpack.
+Fatal Python error: _PyImport_Init: global import state already initialized
+Python runtime state: preinitialized
+
+Thread 0x00007f70922cb740 (most recent call first):
+  <no Python frame>
+(value_agg) root@autodl-container-65f3418573-59bbff33:~/mydata/value_aggregation# unset http_proxy && unset https_proxy
+(value_agg) root@autodl-container-65f3418573-59bbff33:~/mydata/value_aggregation# python ../load_qwen.py
+
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated.
+Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that in
+stalled pynvml for you.
+  import pynvml  # type: ignore[import]
+'(MaxRetryError("HTTPSConnectionPool(host='huggingface.co', port=443): Max retries exceeded with url: /Qwen/Qwen3-0.6B/resolve/main/confi
+g.json (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x7fc3be4ce1b0>: Failed to establish a new connection
+: [Errno 101] Network is unreachable'))"), '(Request ID: 8599ebe1-2f80-49bd-bb38-8ca584edede7)')' thrown while requesting HEAD https://hu
+ggingface.co/Qwen/Qwen3-0.6B/resolve/main/config.json
+Retrying in 1s [Retry 1/5].
+^CTraceback (most recent call last):
+  File "/root/mydata/value_aggregation/../load_qwen.py", line 5, in <module>
+    model = AutoModelForCausalLM.from_pretrained(
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/transformers/models/auto/auto_factory.py", line 492, in from_pretrai
+ned
+    resolved_config_file = cached_file(
+                           ^^^^^^^^^^^^
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/transformers/utils/hub.py", line 266, in cached_file
+    file = cached_files(path_or_repo_id=path_or_repo_id, filenames=[filename], **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/transformers/utils/hub.py", line 424, in cached_files
+    hf_hub_download(
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/huggingface_hub/utils/_validators.py", line 114, in _inner_fn
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/huggingface_hub/file_download.py", line 1014, in hf_hub_download
+    return _hf_hub_download_to_cache_dir(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/huggingface_hub/file_download.py", line 1077, in _hf_hub_download_to
+_cache_dir
+    (url_to_download, etag, commit_hash, expected_size, xet_file_data, head_call_error) = _get_metadata_or_catch_error(
+                                                                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/huggingface_hub/file_download.py", line 1550, in _get_metadata_or_ca
+tch_error
+    metadata = get_hf_file_metadata(
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/huggingface_hub/utils/_validators.py", line 114, in _inner_fn
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/huggingface_hub/file_download.py", line 1467, in get_hf_file_metadat
+a
+    r = _request_wrapper(
+        ^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/huggingface_hub/file_download.py", line 283, in _request_wrapper
+    response = _request_wrapper(
+               ^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/huggingface_hub/file_download.py", line 306, in _request_wrapper
+    response = http_backoff(method=method, url=url, **params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/huggingface_hub/utils/_http.py", line 307, in http_backoff
+    response = session.request(method=method, url=url, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/requests/sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/requests/sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/huggingface_hub/utils/_http.py", line 96, in send
+    return super().send(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/requests/adapters.py", line 644, in send
+    resp = conn.urlopen(
+           ^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/urllib3/connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+               ^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/urllib3/connectionpool.py", line 464, in _make_request
+    self._validate_conn(conn)
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/urllib3/connectionpool.py", line 1093, in _validate_conn
+    conn.connect()
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/urllib3/connection.py", line 753, in connect
+    self.sock = sock = self._new_conn()
+                       ^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/urllib3/connection.py", line 198, in _new_conn
+    sock = connection.create_connection(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/urllib3/util/connection.py", line 73, in create_connection
+    sock.connect(sa)
+KeyboardInterrupt
+^C
+(value_agg) root@autodl-container-65f3418573-59bbff33:~/mydata/value_aggregation# 【^C
+(value_agg) root@autodl-container-65f3418573-59bbff33:~/mydata/value_aggregation# bash ./run_va_gather.sh
+
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated.
+Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that in
+stalled pynvml for you.
+  import pynvml  # type: ignore[import]
+model.safetensors:   7%|████████▏
+    | 105M/1.50G [02:30<1:03:22, 368kB/s]^\./run_va_gather.sh: line 5: 40930 Quit                    python ./download_model.py
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated.
+Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that in
+stalled pynvml for you.
+  import pynvml  # type: ignore[import]
+^\./run_va_gather.sh: line 6: 42169 Quit                    (core dumped) deepspeed --num_gpus 2 va_train.py --train_batch_size 1024 --pa
+th /root/autodl-tmp/dataset
+(value_agg) root@autodl-container-65f3418573-59bbff33:~/mydata/value_aggregation# source /etc/network_turbo
+设置成功
+注意：仅限于学术用途和加速访问github/huggingface，不承诺稳定性保证
+(value_agg) root@autodl-container-65f3418573-59bbff33:~/mydata/value_aggregation# bash ./run_va_gather.sh
+
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated.
+Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that in
+stalled pynvml for you.
+  import pynvml  # type: ignore[import]
+model.safetensors:   0%|
+             | 0.00/1.50G [00:02<?, ?B/s]
+Traceback (most recent call last):
+  File "/root/mydata/value_aggregation/./download_model.py", line 3, in <module>
+    model = AutoModelForCausalLM.from_pretrained(
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/transformers/models/auto/auto_factory.py", line 571, in from_pretrai
+ned
+    return model_class.from_pretrained(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/transformers/modeling_utils.py", line 279, in _wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/transformers/modeling_utils.py", line 4261, in from_pretrained
+    checkpoint_files, sharded_metadata = _get_resolved_checkpoint_files(
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/transformers/modeling_utils.py", line 1100, in _get_resolved_checkpo
+int_files
+    raise EnvironmentError(
+OSError: Qwen/Qwen3-0.6B does not appear to have a file named pytorch_model.bin, model.safetensors, tf_model.h5, model.ckpt or flax_model
+.msgpack.
+Fatal Python error: _PyImport_Init: global import state already initialized
+Python runtime state: preinitialized
+
+Thread 0x00007f2b6f3fd740 (most recent call first):
+  <no Python frame>
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated.
+Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that in
+stalled pynvml for you.
+  import pynvml  # type: ignore[import]
+^\./run_va_gather.sh: line 6: 42767 Quit                    (core dumped) deepspeed --num_gpus 2 va_train.py --train_batch_size 1024 --pa
+th /root/autodl-tmp/dataset
+(value_agg) root@autodl-container-65f3418573-59bbff33:~/mydata/value_aggregation# bash ./run_va_gather.sh
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated.
+Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that in
+stalled pynvml for you.
+  import pynvml  # type: ignore[import]
+model.safetensors:   0%|
+             | 0.00/1.50G [00:03<?, ?B/s]
+Traceback (most recent call last):
+  File "/root/mydata/value_aggregation/./download_model.py", line 3, in <module>
+    model = AutoModelForCausalLM.from_pretrained(
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/transformers/models/auto/auto_factory.py", line 571, in from_pretrai
+ned
+    return model_class.from_pretrained(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/transformers/modeling_utils.py", line 279, in _wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/transformers/modeling_utils.py", line 4261, in from_pretrained
+    checkpoint_files, sharded_metadata = _get_resolved_checkpoint_files(
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/transformers/modeling_utils.py", line 1100, in _get_resolved_checkpo
+int_files
+    raise EnvironmentError(
+OSError: Qwen/Qwen3-0.6B does not appear to have a file named pytorch_model.bin, model.safetensors, tf_model.h5, model.ckpt or flax_model
+.msgpack.
+Fatal Python error: _PyImport_Init: global import state already initialized
+Python runtime state: preinitialized
+
+Thread 0x00007fcc1135e740 (most recent call first):
+  <no Python frame>
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated.
+Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that in
+stalled pynvml for you.
+  import pynvml  # type: ignore[import]
+[2026-03-25 20:33:46,693] [WARNING] [runner.py:232:fetch_hostfile] Unable to find hostfile, will proceed with training with local resourc
+es only.
+[2026-03-25 20:33:46,693] [INFO] [runner.py:630:main] cmd = /root/miniconda3/envs/value_agg/bin/python3.12 -u -m deepspeed.launcher.launc
+h --world_info=eyJsb2NhbGhvc3QiOiBbMCwgMV19 --master_addr=127.0.0.1 --master_port=29500 --enable_each_rank_log=None --log_level=info va_t
+rain.py --train_batch_size 1024 --path /root/autodl-tmp/dataset
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated.
+Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that in
+stalled pynvml for you.
+  import pynvml  # type: ignore[import]
+[2026-03-25 20:33:51,772] [INFO] [launch.py:162:main] WORLD INFO DICT: {'localhost': [0, 1]}
+[2026-03-25 20:33:51,772] [INFO] [launch.py:168:main] nnodes=1, num_local_procs=2, node_rank=0
+[2026-03-25 20:33:51,772] [INFO] [launch.py:179:main] global_rank_mapping=defaultdict(<class 'list'>, {'localhost': [0, 1]})
+[2026-03-25 20:33:51,772] [INFO] [launch.py:180:main] dist_world_size=2
+[2026-03-25 20:33:51,772] [INFO] [launch.py:184:main] Setting CUDA_VISIBLE_DEVICES=0,1
+[2026-03-25 20:33:51,773] [INFO] [launch.py:272:main] process 43874 spawned with command: ['/root/miniconda3/envs/value_agg/bin/python3.1
+2', '-u', 'va_train.py', '--local_rank=0', '--train_batch_size', '1024', '--path', '/root/autodl-tmp/dataset']
+[2026-03-25 20:33:51,773] [INFO] [launch.py:272:main] process 43875 spawned with command: ['/root/miniconda3/envs/value_agg/bin/python3.1
+2', '-u', 'va_train.py', '--local_rank=1', '--train_batch_size', '1024', '--path', '/root/autodl-tmp/dataset']
+^\./run_va_gather.sh: line 6: 43371 Quit                    deepspeed --num_gpus 2 va_train.py --train_batch_size 1024 --path /root/autod
+l-tmp/dataset
+(value_agg) root@autodl-container-65f3418573-59bbff33:~/mydata/value_aggregation# unset http_proxy && unset https_proxy
+(value_agg) root@autodl-container-65f3418573-59bbff33:~/mydata/value_aggregation# bash ./run_va_gather.sh
+
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated.
+Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that in
+stalled pynvml for you.
+  import pynvml  # type: ignore[import]
+model.safetensors:  13%|███████████████▌
+model.safetensors:  14%|████████████████▎
+model.safetensors:  14%|████████████████▎
+    | 210M/1.50G [06:30<2:20:36, 153kB/s]^\./run_va_gather.sh: line 5: 44144 Quit                    python ./download_model.py
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated.
+Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that in
+stalled pynvml for you.
+  import pynvml  # type: ignore[import]
+[2026-03-25 20:41:48,837] [WARNING] [runner.py:232:fetch_hostfile] Unable to find hostfile, will proceed with training with local resourc
+es only.
+[2026-03-25 20:41:48,837] [INFO] [runner.py:630:main] cmd = /root/miniconda3/envs/value_agg/bin/python3.12 -u -m deepspeed.launcher.launc
+h --world_info=eyJsb2NhbGhvc3QiOiBbMCwgMV19 --master_addr=127.0.0.1 --master_port=29500 --enable_each_rank_log=None --log_level=info va_t
+rain.py --train_batch_size 1024 --path /root/autodl-tmp/dataset
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated.
+Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that in
+stalled pynvml for you.
+  import pynvml  # type: ignore[import]
+[2026-03-25 20:41:53,809] [INFO] [launch.py:162:main] WORLD INFO DICT: {'localhost': [0, 1]}
+[2026-03-25 20:41:53,809] [INFO] [launch.py:168:main] nnodes=1, num_local_procs=2, node_rank=0
+[2026-03-25 20:41:53,809] [INFO] [launch.py:179:main] global_rank_mapping=defaultdict(<class 'list'>, {'localhost': [0, 1]})
+[2026-03-25 20:41:53,809] [INFO] [launch.py:180:main] dist_world_size=2
+[2026-03-25 20:41:53,809] [INFO] [launch.py:184:main] Setting CUDA_VISIBLE_DEVICES=0,1
+[2026-03-25 20:41:53,810] [INFO] [launch.py:272:main] process 47199 spawned with command: ['/root/miniconda3/envs/value_agg/bin/python3.1
+2', '-u', 'va_train.py', '--local_rank=0', '--train_batch_size', '1024', '--path', '/root/autodl-tmp/dataset']
+[2026-03-25 20:41:53,810] [INFO] [launch.py:272:main] process 47200 spawned with command: ['/root/miniconda3/envs/value_agg/bin/python3.1
+2', '-u', 'va_train.py', '--local_rank=1', '--train_batch_size', '1024', '--path', '/root/autodl-tmp/dataset']
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated.
+Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that in
+stalled pynvml for you.
+  import pynvml  # type: ignore[import]
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated.
+Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that in
+stalled pynvml for you.
+  import pynvml  # type: ignore[import]
+^\./run_va_gather.sh: line 6: 46723 Quit                    deepspeed --num_gpus 2 va_train.py --train_batch_size 1024 --path /root/autod
+l-tmp/dataset
+(value_agg) root@autodl-container-65f3418573-59bbff33:~/mydata/value_aggregation# bash ./run_va_gather.sh
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated.
+Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that in
+stalled pynvml for you.
+  import pynvml  # type: ignore[import]
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/huggingface_hub/file_download.py:949: FutureWarning: `resume_download` is de
+precated and will be removed in version 1.0.0. Downloads always resume when possible. If you want to force a new download, use `force_dow
+nload=True`.
+  warnings.warn(
+model.safetensors.index.json: 50.9kB [00:00, 52.3MB/s]                                                            | 0/13 [00:00<?, ?it/s]
+preprocessor_config.json: 100%|█████████████████████████████████████████████████████████████████████████| 390/390 [00:00<00:00, 2.94MB/s]
+LICENSE: 11.5kB [00:00, 736kB/s]                                                                               | 0.00/390 [00:00<?, ?B/s]
+video_preprocessor_config.json: 100%|███████████████████████████████████████████████████████████████████| 385/385 [00:00<00:00, 3.58MB/s]
+.gitattributes: 1.57kB [00:00, 9.05MB/s]                                                                       | 0.00/385 [00:00<?, ?B/s]
+README.md: 61.7kB [00:00, 2.34MB/s]                                                                       | 1/13 [00:02<00:29,  2.45s/it]
+Fetching 13 files:  23%|██████████████████▉                                                               | 3/13 [00:06<00:19,  1.96s/it^
+\./run_va_gather.sh: line 5: 47317 Quit                    (core dumped) python ./download_model.py   | 115M/1.75G [01:27<29:37, 918kB/s]
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated.
+Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that in
+stalled pynvml for you.
+  import pynvml  # type: ignore[import]
+^\./run_va_gather.sh: line 6: 48099 Quit                    (core dumped) deepspeed --num_gpus 2 va_train.py --train_batch_size 1024 --pa
+th /root/autodl-tmp/dataset
+(value_agg) root@autodl-container-65f3418573-59bbff33:~/mydata/value_aggregation# bash ./run_va_gather.sh
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated.
+Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that in
+stalled pynvml for you.
+  import pynvml  # type: ignore[import]
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/huggingface_hub/file_download.py:949: FutureWarning: `resume_download` is de
+precated and will be removed in version 1.0.0. Downloads always resume when possible. If you want to force a new download, use `force_dow
+nload=True`.
+  warnings.warn(
+README.md: 14.0kB [00:00, 36.3MB/s]                                                                               | 0/10 [00:00<?, ?it/s]
+LICENSE: 11.3kB [00:00, 32.1kB/s]
+generation_config.json: 100%|███████████████████████████████████████████████████████████████████████████| 239/239 [00:00<00:00, 1.67MB/s]
+.gitattributes: 1.57kB [00:00, 7.62MB/s]                                                                       | 0.00/239 [00:00<?, ?B/s]
+Fetching 10 files:  10%|████████▏                                                                         | 1/10 [00:01<00:16,  1.85s/it^
+\./run_va_gather.sh: line 5: 48260 Quit                    (core dumped) python ./download_model.py
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated.
+Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that in
+stalled pynvml for you.
+  import pynvml  # type: ignore[import]
+[2026-03-25 20:47:56,408] [WARNING] [runner.py:232:fetch_hostfile] Unable to find hostfile, will proceed with training with local resourc
+es only.
+[2026-03-25 20:47:56,408] [INFO] [runner.py:630:main] cmd = /root/miniconda3/envs/value_agg/bin/python3.12 -u -m deepspeed.launcher.launc
+h --world_info=eyJsb2NhbGhvc3QiOiBbMCwgMV19 --master_addr=127.0.0.1 --master_port=29500 --enable_each_rank_log=None --log_level=info va_t
+rain.py --train_batch_size 1024 --path /root/autodl-tmp/dataset
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated.
+Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that in
+stalled pynvml for you.
+  import pynvml  # type: ignore[import]
+^\./run_va_gather.sh: line 6: 49788 Quit                    deepspeed --num_gpus 2 va_train.py --train_batch_size 1024 --path /root/autod
+l-tmp/dataset
+(value_agg) root@autodl-container-65f3418573-59bbff33:~/mydata/value_aggregation# bash ./run_va_gather.sh
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated.
+Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that in
+stalled pynvml for you.
+  import pynvml  # type: ignore[import]
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/huggingface_hub/file_download.py:949: FutureWarning: `resume_download` is de
+precated and will be removed in version 1.0.0. Downloads always resume when possible. If you want to force a new download, use `force_dow
+nload=True`.
+  warnings.warn(
+Fetching 10 files:   0%|                                                                                          | 0/10 [00:00<?, ?it/s^
+\./run_va_gather.sh: line 5: 50092 Quit                    (core dumped) python ./download_model.py          | 336M/1.50G [00:00<?, ?B/s]
+^\./run_va_gather.sh: line 6: 50657 Quit                    (core dumped) deepspeed --num_gpus 2 va_train.py --train_batch_size 1024 --pa
+th /root/autodl-tmp/dataset
+(value_agg) root@autodl-container-65f3418573-59bbff33:~/mydata/value_aggregation# bash ./run_va_gather.sh
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated.
+Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that in
+stalled pynvml for you.
+  import pynvml  # type: ignore[import]
+Fetching 10 files:   0%|                                                                                          | 0/10 [00:00<?, ?it/s]
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/huggingface_hub/file_download.py:949: FutureWarning: `resume_download` is de
+precated and will be removed in version 1.0.0. Downloads always resume when possible. If you want to force a new download, use `force_dow
+nload=True`.
+  warnings.warn(
+^\./run_va_gather.sh: line 5: 50839 Quit                    (core dumped) python ./download_model.py
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated.
+Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that in
+stalled pynvml for you.
+  import pynvml  # type: ignore[import]
+^\./run_va_gather.sh: line 6: 53907 Quit                    (core dumped) deepspeed --num_gpus 2 va_train.py --train_batch_size 1024 --pa
+th /root/autodl-tmp/dataset
+(value_agg) root@autodl-container-65f3418573-59bbff33:~/mydata/value_aggregation# bash ./run_va_gather.sh
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated.
+Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that in
+stalled pynvml for you.
+  import pynvml  # type: ignore[import]
+Fetching 10 files:   0%|                                                                                   | 0/10 [00:00<?, ?it/s]/root/m
+iniconda3/envs/value_agg/lib/python3.12/site-packages/huggingface_hub/file_download.py:949: FutureWarning: `resume_download` is deprecate
+d and will be removed in version 1.0.0. Downloads always resume when possible. If you want to force a new download, use `force_download=T
+rue`.
+  warnings.warn(
+'(ReadTimeoutError("HTTPSConnectionPool(host='cas-bridge.xethub.hf.co', port=443): Read timed out. (read timeout=10)"), '(Request ID: a10
+343d0-876d-4ad3-8602-e685a0851718)')' thrown while requesting GET https://cas-bridge.xethub.hf.co/xet-bridge-us/680da718233834890aa01f51/
+6f87d3bff66602a9611e541180dec950a6b6a9068ca274ee43ac8f83550f0223?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X
+-Amz-Credential=cas%2F20260325%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20260325T130107Z&X-Amz-Expires=3600&X-Amz-Signature=2ecd571d29c
+204bdecb5bb8d8951c16efe929042491041630beee028989230d5&X-Amz-SignedHeaders=host&X-Xet-Cas-Uid=66a02d3f6580efecfb4d09cc&response-content-di
+sposition=inline%3B+filename*%3DUTF-8%27%27model.safetensors%3B+filename%3D%22model.safetensors%22%3B&x-amz-checksum-mode=ENABLED&x-id=Ge
+tObject&Expires=1774447267&Policy=eyJTdGF0ZW1lbnQiOlt7IkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiQVdTOkVwb2NoVGltZSI6MTc3NDQ0NzI2N319LCJSZXN
+vdXJjZSI6Imh0dHBzOi8vY2FzLWJyaWRnZS54ZXRodWIuaGYuY28veGV0LWJyaWRnZS11cy82ODBkYTcxODIzMzgzNDg5MGFhMDFmNTEvNmY4N2QzYmZmNjY2MDJhOTYxMWU1NDEx
+ODBkZWM5NTBhNmI2YTkwNjhjYTI3NGVlNDNhYzhmODM1NTBmMDIyMyoifV19&Signature=nI68zhXk2AqS9YLZODiNYfmc3rFlSPeNYGqyipahDottzA8qRiCUvamaQtdwT2Cjwt
+eVu%7EssuqDlKprTYXRi21nBFmBY%7EpBsHujdspSEeF6IGWGCaatG-PKS%7ECgiv0FTzTOHoeHX%7EpTX4VDzweFLSGagmYIU%7Euehqao9j5ANHRmPDR7%7EWhe9eLzfXBbbKR8
+Yrw%7EQRIMu1Tdk%7ExmgvBi4z9Thh9h166DpbvUn8Q9HxClvYzYxMgLGX8RnLyN6kW8O7MponAz8c%7E019fkIWoIajN64CK8uKkJ9tJSnI6nVtJUTfHUCJJGNKQbhhzXdOPGKJs
+OEn0vSB9n5OOvwSKv38g__&Key-Pair-Id=K2L8F4GPSG1IFC
+Retrying in 1s [Retry 1/5].
+                                                                                                                                 ^\./run_
+va_gather.sh: line 5: 54966 Quit                    (core dumped) python ./download_model.py   | 419M/1.50G [00:00<?, ?B/s]
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated.
+Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that in
+stalled pynvml for you.
+  import pynvml  # type: ignore[import]
+^\./run_va_gather.sh: line 6: 55407 Quit                    (core dumped) deepspeed --num_gpus 2 va_train.py --train_batch_size 1024 --pa
+th /root/autodl-tmp/dataset
+(value_agg) root@autodl-container-65f3418573-59bbff33:~/mydata/value_aggregation# unset http_proxy && unset https_proxy
+(value_agg) root@autodl-container-65f3418573-59bbff33:~/mydata/value_aggregation# bash ./run_va_gather.sh
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated.
+Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that in
+stalled pynvml for you.
+  import pynvml  # type: ignore[import]
+Fetching 10 files:   0%|                                                                                   | 0/10 [00:00<?, ?it/s]/root/m
+iniconda3/envs/value_agg/lib/python3.12/site-packages/huggingface_hub/file_download.py:949: FutureWarning: `resume_download` is deprecate
+d and will be removed in version 1.0.0. Downloads always resume when possible. If you want to force a new download, use `force_download=T
+rue`.
+  warnings.warn(
+                                                                                                                                 ^\./run_
+va_gather.sh: line 5: 55553 Quit                    (core dumped) python ./download_model.py1.50G [06:55<4:43:28, 61.9kB/s]
+./run_va_gather.sh: line 6: y: command not found
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated.
+Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that in
+stalled pynvml for you.
+  import pynvml  # type: ignore[import]
+[2026-03-25 21:16:40,785] [WARNING] [runner.py:232:fetch_hostfile] Unable to find hostfile, will proceed with training with local resourc
+es only.
+[2026-03-25 21:16:40,786] [INFO] [runner.py:630:main] cmd = /root/miniconda3/envs/value_agg/bin/python3.12 -u -m deepspeed.launcher.launc
+h --world_info=eyJsb2NhbGhvc3QiOiBbMCwgMV19 --master_addr=127.0.0.1 --master_port=29500 --enable_each_rank_log=None --log_level=info va_t
+rain.py --train_batch_size 1024 --path /root/autodl-tmp/dataset
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated.
+Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that in
+stalled pynvml for you.
+  import pynvml  # type: ignore[import]
+[2026-03-25 21:16:45,997] [INFO] [launch.py:162:main] WORLD INFO DICT: {'localhost': [0, 1]}
+[2026-03-25 21:16:45,997] [INFO] [launch.py:168:main] nnodes=1, num_local_procs=2, node_rank=0
+[2026-03-25 21:16:45,997] [INFO] [launch.py:179:main] global_rank_mapping=defaultdict(<class 'list'>, {'localhost': [0, 1]})
+[2026-03-25 21:16:45,998] [INFO] [launch.py:180:main] dist_world_size=2
+[2026-03-25 21:16:45,998] [INFO] [launch.py:184:main] Setting CUDA_VISIBLE_DEVICES=0,1
+[2026-03-25 21:16:45,998] [INFO] [launch.py:272:main] process 59073 spawned with command: ['/root/miniconda3/envs/value_agg/bin/python3.1
+2', '-u', 'va_train.py', '--local_rank=0', '--train_batch_size', '1024', '--path', '/root/autodl-tmp/dataset']
+[2026-03-25 21:16:45,999] [INFO] [launch.py:272:main] process 59074 spawned with command: ['/root/miniconda3/envs/value_agg/bin/python3.1
+2', '-u', 'va_train.py', '--local_rank=1', '--train_batch_size', '1024', '--path', '/root/autodl-tmp/dataset']
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated.
+Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that in
+stalled pynvml for you.
+  import pynvml  # type: ignore[import]
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated.
+Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that in
+stalled pynvml for you.
+  import pynvml  # type: ignore[import]
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/transformers/models/auto/tokenization_auto.py:897: FutureWarning: The `use_a
+uth_token` argument is deprecated and will be removed in v5 of Transformers. Please use `token` instead.
+  warnings.warn(
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/transformers/models/auto/tokenization_auto.py:897: FutureWarning: The `use_a
+uth_token` argument is deprecated and will be removed in v5 of Transformers. Please use `token` instead.
+  warnings.warn(
+Loading raw data:   0%|                                                                                    | 0/14 [00:00<?, ?it/s]allnli.
+jsonl
+Loading raw data:   0%|                                                                                    | 0/14 [00:00<?, ?it/s]allnli.
+jsonl
+Loading raw data:   7%|█████▍                                                                      | 1/14 [00:00<00:07,  1.64it/s]dureade
+r.jsonl
+Loading raw data:   7%|█████▍                                                                      | 1/14 [00:00<00:07,  1.68it/s]dureade
+r.jsonl
+Loading raw data:  14%|██████████▊                                                                 | 2/14 [00:01<00:12,  1.03s/it]eli5_qu
+estion_answer.jsonl
+Loading raw data:  21%|████████████████▎                                                           | 3/14 [00:02<00:06,  1.63it/s]fever.j
+sonl
+Loading raw data:  14%|██████████▊                                                                 | 2/14 [00:01<00:12,  1.01s/it]eli5_qu
+estion_answer.jsonl
+Loading raw data:  21%|████████████████▎                                                           | 3/14 [00:02<00:06,  1.65it/s]fever.j
+sonl
+Loading raw data:  29%|█████████████████████▋                                                      | 4/14 [00:02<00:07,  1.39it/s]hotpot_
+qa.jsonl
+Loading raw data:  29%|█████████████████████▋                                                      | 4/14 [00:02<00:07,  1.42it/s]hotpot_
+qa.jsonl
+Loading raw data:  36%|███████████████████████████▏                                                | 5/14 [00:03<00:05,  1.58it/s]miracl.
+jsonl
+Loading raw data:  36%|███████████████████████████▏                                                | 5/14 [00:03<00:05,  1.60it/s]miracl.
+jsonl
+Loading raw data:  43%|████████████████████████████████▌                                           | 6/14 [00:03<00:04,  1.74it/s]mrtydi.
+jsonl
+Loading raw data:  43%|████████████████████████████████▌                                           | 6/14 [00:03<00:04,  1.76it/s]mrtydi.
+jsonl
+Loading raw data:  50%|██████████████████████████████████████                                      | 7/14 [00:04<00:04,  1.64it/s]msmarco
+_document.jsonl
+Loading raw data:  50%|██████████████████████████████████████                                      | 7/14 [00:04<00:04,  1.65it/s]msmarco
+_document.jsonl
+Loading raw data:  57%|███████████████████████████████████████████▍                                | 8/14 [00:07<00:08,  1.34s/it]msmarco
+_passage.jsonl
+Loading raw data:  57%|███████████████████████████████████████████▍                                | 8/14 [00:07<00:07,  1.32s/it]msmarco
+_passage.jsonl
+Loading raw data:  64%|████████████████████████████████████████████████▊                           | 9/14 [00:08<00:06,  1.20s/it]nq.json
+l
+Loading raw data:  64%|████████████████████████████████████████████████▊                           | 9/14 [00:08<00:05,  1.19s/it]nq.json
+l
+Loading raw data:  71%|█████████████████████████████████████████████████████▌                     | 10/14 [00:08<00:04,  1.03s/it]quora_d
+uplicates.jsonl
+Loading raw data:  79%|██████████████████████████████████████████████████████████▉                | 11/14 [00:09<00:02,  1.29it/s]squad.j
+sonl
+Loading raw data:  71%|█████████████████████████████████████████████████████▌                     | 10/14 [00:08<00:04,  1.01s/it]quora_d
+uplicates.jsonl
+Loading raw data:  79%|██████████████████████████████████████████████████████████▉                | 11/14 [00:09<00:02,  1.30it/s]squad.j
+sonl
+Loading raw data:  86%|████████████████████████████████████████████████████████████████▎          | 12/14 [00:09<00:01,  1.41it/s]t2ranki
+ng.jsonl
+Loading raw data:  86%|████████████████████████████████████████████████████████████████▎          | 12/14 [00:09<00:01,  1.42it/s]t2ranki
+ng.jsonl
+Loading raw data:  93%|█████████████████████████████████████████████████████████████████████▋     | 13/14 [00:12<00:01,  1.47s/it]trivia_
+qa.jsonl
+Loading raw data:  93%|█████████████████████████████████████████████████████████████████████▋     | 13/14 [00:12<00:01,  1.46s/it]trivia_
+qa.jsonl
+Loading raw data: 100%|███████████████████████████████████████████████████████████████████████████| 14/14 [00:14<00:00,  1.04s/it]
+Loading raw data: 100%|███████████████████████████████████████████████████████████████████████████| 14/14 [00:14<00:00,  1.03s/it]
+随机种子已设置为 2025
+随机种子已设置为 2025
+Map:   6%|████▏                                                                  | 60416/1024000 [00:32<11:06, 1446.01 examples/s]^\./run
+_va_gather.sh: line 7: 58563 Quit                    deepspeed --num_gpus 2 va_train.py --train_batch_size 1024 --path /root/autodl-tmp/d
+ataset
+(value_agg) root@autodl-container-65f3418573-59bbff33:~/mydata/value_aggregation# bash ./run_va_gather.sh
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated.
+Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that in
+stalled pynvml for you.
+  import pynvml  # type: ignore[import]
+^\./run_va_gather.sh: line 6: 60222 Quit                    (core dumped) deepspeed --num_gpus 2 va_train.py --train_batch_size 1024 --pa
+th /root/autodl-tmp/dataset
+(value_agg) root@autodl-container-65f3418573-59bbff33:~/mydata/value_aggregation# bash ./run_va_gather.sh
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated.
+Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that in
+stalled pynvml for you.
+  import pynvml  # type: ignore[import]
+[2026-03-25 21:19:05,491] [WARNING] [runner.py:232:fetch_hostfile] Unable to find hostfile, will proceed with training with local resourc
+es only.
+[2026-03-25 21:19:05,491] [INFO] [runner.py:630:main] cmd = /root/miniconda3/envs/value_agg/bin/python3.12 -u -m deepspeed.launcher.launc
+h --world_info=eyJsb2NhbGhvc3QiOiBbMCwgMV19 --master_addr=127.0.0.1 --master_port=29500 --enable_each_rank_log=None --log_level=info va_t
+rain.py --train_batch_size 1024 --path /root/autodl-tmp/dataset
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated.
+Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that in
+stalled pynvml for you.
+  import pynvml  # type: ignore[import]
+[2026-03-25 21:19:10,594] [INFO] [launch.py:162:main] WORLD INFO DICT: {'localhost': [0, 1]}
+[2026-03-25 21:19:10,594] [INFO] [launch.py:168:main] nnodes=1, num_local_procs=2, node_rank=0
+[2026-03-25 21:19:10,594] [INFO] [launch.py:179:main] global_rank_mapping=defaultdict(<class 'list'>, {'localhost': [0, 1]})
+[2026-03-25 21:19:10,594] [INFO] [launch.py:180:main] dist_world_size=2
+[2026-03-25 21:19:10,594] [INFO] [launch.py:184:main] Setting CUDA_VISIBLE_DEVICES=0,1
+[2026-03-25 21:19:10,594] [INFO] [launch.py:272:main] process 61030 spawned with command: ['/root/miniconda3/envs/value_agg/bin/python3.1
+2', '-u', 'va_train.py', '--local_rank=0', '--train_batch_size', '1024', '--path', '/root/autodl-tmp/dataset']
+[2026-03-25 21:19:10,595] [INFO] [launch.py:272:main] process 61031 spawned with command: ['/root/miniconda3/envs/value_agg/bin/python3.1
+2', '-u', 'va_train.py', '--local_rank=1', '--train_batch_size', '1024', '--path', '/root/autodl-tmp/dataset']
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated.
+Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that in
+stalled pynvml for you.
+  import pynvml  # type: ignore[import]
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated.
+Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that in
+stalled pynvml for you.
+  import pynvml  # type: ignore[import]
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/transformers/models/auto/tokenization_auto.py:897: FutureWarning: The `use_a
+uth_token` argument is deprecated and will be removed in v5 of Transformers. Please use `token` instead.
+  warnings.warn(
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/transformers/models/auto/tokenization_auto.py:897: FutureWarning: The `use_a
+uth_token` argument is deprecated and will be removed in v5 of Transformers. Please use `token` instead.
+  warnings.warn(
+Loading raw data:   0%|                                                                                    | 0/14 [00:00<?, ?it/s]allnli.
+jsonl
+Loading raw data:   0%|                                                                                    | 0/14 [00:00<?, ?it/s]allnli.
+jsonl
+Loading raw data:   7%|█████▍                                                                      | 1/14 [00:00<00:07,  1.70it/s]dureade
+r.jsonl
+Loading raw data:   7%|█████▍                                                                      | 1/14 [00:00<00:07,  1.66it/s]dureade
+r.jsonl
+Loading raw data:  14%|██████████▊                                                                 | 2/14 [00:01<00:11,  1.01it/s]eli5_qu
+estion_answer.jsonl
+Loading raw data:  21%|████████████████▎                                                           | 3/14 [00:01<00:06,  1.69it/s]fever.j
+sonl
+Loading raw data:  14%|██████████▊                                                                 | 2/14 [00:01<00:12,  1.02s/it]eli5_qu
+estion_answer.jsonl
+Loading raw data:  21%|████████████████▎                                                           | 3/14 [00:02<00:06,  1.63it/s]fever.j
+sonl
+Loading raw data:  29%|█████████████████████▋                                                      | 4/14 [00:02<00:07,  1.42it/s]hotpot_
+qa.jsonl
+Loading raw data:  29%|█████████████████████▋                                                      | 4/14 [00:02<00:07,  1.38it/s]hotpot_
+qa.jsonl
+Loading raw data:  36%|███████████████████████████▏                                                | 5/14 [00:03<00:05,  1.61it/s]miracl.
+jsonl
+Loading raw data:  36%|███████████████████████████▏                                                | 5/14 [00:03<00:05,  1.56it/s]miracl.
+jsonl
+Loading raw data:  43%|████████████████████████████████▌                                           | 6/14 [00:03<00:04,  1.77it/s]mrtydi.
+jsonl
+Loading raw data:  43%|████████████████████████████████▌                                           | 6/14 [00:03<00:04,  1.73it/s]mrtydi.
+jsonl
+Loading raw data:  50%|██████████████████████████████████████                                      | 7/14 [00:04<00:04,  1.67it/s]msmarco
+_document.jsonl
+Loading raw data:  50%|██████████████████████████████████████                                      | 7/14 [00:04<00:04,  1.65it/s]msmarco
+_document.jsonl
+Loading raw data:  57%|███████████████████████████████████████████▍                                | 8/14 [00:07<00:07,  1.30s/it]msmarco
+_passage.jsonl
+Loading raw data:  57%|███████████████████████████████████████████▍                                | 8/14 [00:07<00:07,  1.30s/it]msmarco
+_passage.jsonl
+Loading raw data:  64%|████████████████████████████████████████████████▊                           | 9/14 [00:08<00:05,  1.16s/it]nq.json
+l
+Loading raw data:  64%|████████████████████████████████████████████████▊                           | 9/14 [00:08<00:05,  1.16s/it]nq.json
+l
+Loading raw data:  71%|█████████████████████████████████████████████████████▌                     | 10/14 [00:08<00:03,  1.02it/s]quora_d
+uplicates.jsonl
+Loading raw data:  79%|██████████████████████████████████████████████████████████▉                | 11/14 [00:08<00:02,  1.34it/s]squad.j
+sonl
+Loading raw data:  71%|█████████████████████████████████████████████████████▌                     | 10/14 [00:08<00:03,  1.02it/s]quora_d
+uplicates.jsonl
+Loading raw data:  79%|██████████████████████████████████████████████████████████▉                | 11/14 [00:08<00:02,  1.34it/s]squad.j
+sonl
+Loading raw data:  86%|████████████████████████████████████████████████████████████████▎          | 12/14 [00:09<00:01,  1.46it/s]t2ranki
+ng.jsonl
+Loading raw data:  86%|████████████████████████████████████████████████████████████████▎          | 12/14 [00:09<00:01,  1.46it/s]t2ranki
+ng.jsonl
+Loading raw data:  93%|█████████████████████████████████████████████████████████████████████▋     | 13/14 [00:12<00:01,  1.44s/it]trivia_
+qa.jsonl
+Loading raw data:  93%|█████████████████████████████████████████████████████████████████████▋     | 13/14 [00:12<00:01,  1.43s/it]trivia_
+qa.jsonl
+Loading raw data: 100%|███████████████████████████████████████████████████████████████████████████| 14/14 [00:14<00:00,  1.01s/it]
+Loading raw data: 100%|███████████████████████████████████████████████████████████████████████████| 14/14 [00:14<00:00,  1.01s/it]
+随机种子已设置为 2025
+随机种子已设置为 2025
+Map:   3%|█▉                                                                     | 27648/1024000 [00:14<10:09, 1635.86 examples/s]^\./run
+_va_gather.sh: line 6: 60533 Quit                    deepspeed --num_gpus 2 va_train.py --train_batch_size 1024 --path /root/autodl-tmp/d
+ataset
+(value_agg) root@autodl-container-65f3418573-59bbff33:~/mydata/value_aggregation# bash ./run_va_gather.sh
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated.
+Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that in
+stalled pynvml for you.
+  import pynvml  # type: ignore[import]
+[2026-03-25 21:20:27,631] [WARNING] [runner.py:232:fetch_hostfile] Unable to find hostfile, will proceed with training with local resourc
+es only.
+[2026-03-25 21:20:27,631] [INFO] [runner.py:630:main] cmd = /root/miniconda3/envs/value_agg/bin/python3.12 -u -m deepspeed.launcher.launc
+h --world_info=eyJsb2NhbGhvc3QiOiBbMCwgMV19 --master_addr=127.0.0.1 --master_port=29500 --enable_each_rank_log=None --log_level=info va_t
+rain.py --train_batch_size 1024 --path /root/autodl-tmp/dataset
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated.
+Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that in
+stalled pynvml for you.
+  import pynvml  # type: ignore[import]
+[2026-03-25 21:20:32,665] [INFO] [launch.py:162:main] WORLD INFO DICT: {'localhost': [0, 1]}
+[2026-03-25 21:20:32,665] [INFO] [launch.py:168:main] nnodes=1, num_local_procs=2, node_rank=0
+[2026-03-25 21:20:32,665] [INFO] [launch.py:179:main] global_rank_mapping=defaultdict(<class 'list'>, {'localhost': [0, 1]})
+[2026-03-25 21:20:32,665] [INFO] [launch.py:180:main] dist_world_size=2
+[2026-03-25 21:20:32,665] [INFO] [launch.py:184:main] Setting CUDA_VISIBLE_DEVICES=0,1
+[2026-03-25 21:20:32,666] [INFO] [launch.py:272:main] process 62614 spawned with command: ['/root/miniconda3/envs/value_agg/bin/python3.1
+2', '-u', 'va_train.py', '--local_rank=0', '--train_batch_size', '1024', '--path', '/root/autodl-tmp/dataset']
+[2026-03-25 21:20:32,667] [INFO] [launch.py:272:main] process 62615 spawned with command: ['/root/miniconda3/envs/value_agg/bin/python3.1
+2', '-u', 'va_train.py', '--local_rank=1', '--train_batch_size', '1024', '--path', '/root/autodl-tmp/dataset']
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated.
+Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that in
+stalled pynvml for you.
+  import pynvml  # type: ignore[import]
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated.
+Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that in
+stalled pynvml for you.
+  import pynvml  # type: ignore[import]
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/transformers/models/auto/tokenization_auto.py:897: FutureWarning: The `use_a
+uth_token` argument is deprecated and will be removed in v5 of Transformers. Please use `token` instead.
+  warnings.warn(
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/transformers/models/auto/tokenization_auto.py:897: FutureWarning: The `use_a
+uth_token` argument is deprecated and will be removed in v5 of Transformers. Please use `token` instead.
+  warnings.warn(
+Loading raw data:   0%|                                                                                    | 0/14 [00:00<?, ?it/s]allnli.
+jsonl
+Loading raw data:   0%|                                                                                    | 0/14 [00:00<?, ?it/s]allnli.
+jsonl
+Loading raw data:   7%|█████▍                                                                      | 1/14 [00:00<00:07,  1.70it/s]dureade
+r.jsonl
+Loading raw data:   7%|█████▍                                                                      | 1/14 [00:00<00:08,  1.57it/s]dureade
+r.jsonl
+Loading raw data:  14%|██████████▊                                                                 | 2/14 [00:01<00:11,  1.00it/s]eli5_qu
+estion_answer.jsonl
+Loading raw data:  14%|██████████▊                                                                 | 2/14 [00:01<00:12,  1.04s/it]eli5_qu
+estion_answer.jsonl
+Loading raw data:  21%|████████████████▎                                                           | 3/14 [00:01<00:06,  1.68it/s]fever.j
+sonl
+Loading raw data:  21%|████████████████▎                                                           | 3/14 [00:02<00:06,  1.62it/s]fever.j
+sonl
+Loading raw data:  29%|█████████████████████▋                                                      | 4/14 [00:02<00:06,  1.44it/s]hotpot_
+qa.jsonl
+Loading raw data:  29%|█████████████████████▋                                                      | 4/14 [00:02<00:07,  1.40it/s]hotpot_
+qa.jsonl
+Loading raw data:  36%|███████████████████████████▏                                                | 5/14 [00:03<00:05,  1.62it/s]miracl.
+jsonl
+Loading raw data:  36%|███████████████████████████▏                                                | 5/14 [00:03<00:05,  1.59it/s]miracl.
+jsonl
+Loading raw data:  43%|████████████████████████████████▌                                           | 6/14 [00:03<00:04,  1.78it/s]mrtydi.
+jsonl
+Loading raw data:  43%|████████████████████████████████▌                                           | 6/14 [00:03<00:04,  1.75it/s]mrtydi.
+jsonl
+Loading raw data:  50%|██████████████████████████████████████                                      | 7/14 [00:04<00:04,  1.68it/s]msmarco
+_document.jsonl
+Loading raw data:  50%|██████████████████████████████████████                                      | 7/14 [00:04<00:04,  1.66it/s]msmarco
+_document.jsonl
+Loading raw data:  57%|███████████████████████████████████████████▍                                | 8/14 [00:07<00:07,  1.30s/it]msmarco
+_passage.jsonl
+Loading raw data:  57%|███████████████████████████████████████████▍                                | 8/14 [00:07<00:07,  1.30s/it]msmarco
+_passage.jsonl
+Loading raw data:  64%|████████████████████████████████████████████████▊                           | 9/14 [00:08<00:05,  1.17s/it]nq.json
+l
+Loading raw data:  64%|████████████████████████████████████████████████▊                           | 9/14 [00:08<00:05,  1.17s/it]nq.json
+l
+Loading raw data:  71%|█████████████████████████████████████████████████████▌                     | 10/14 [00:08<00:03,  1.02it/s]quora_d
+uplicates.jsonl
+Loading raw data:  71%|█████████████████████████████████████████████████████▌                     | 10/14 [00:08<00:03,  1.01it/s]quora_d
+uplicates.jsonl
+Loading raw data:  79%|██████████████████████████████████████████████████████████▉                | 11/14 [00:08<00:02,  1.34it/s]squad.j
+sonl
+Loading raw data:  79%|██████████████████████████████████████████████████████████▉                | 11/14 [00:09<00:02,  1.33it/s]squad.j
+sonl
+Loading raw data:  86%|████████████████████████████████████████████████████████████████▎          | 12/14 [00:09<00:01,  1.45it/s]t2ranki
+ng.jsonl
+Loading raw data:  86%|████████████████████████████████████████████████████████████████▎          | 12/14 [00:09<00:01,  1.44it/s]t2ranki
+ng.jsonl
+Loading raw data:  93%|█████████████████████████████████████████████████████████████████████▋     | 13/14 [00:12<00:01,  1.44s/it]trivia_
+qa.jsonl
+Loading raw data:  93%|█████████████████████████████████████████████████████████████████████▋     | 13/14 [00:12<00:01,  1.45s/it]trivia_
+qa.jsonl
+Loading raw data: 100%|███████████████████████████████████████████████████████████████████████████| 14/14 [00:14<00:00,  1.02s/it]
+Loading raw data: 100%|███████████████████████████████████████████████████████████████████████████| 14/14 [00:14<00:00,  1.02s/it]
+随机种子已设置为 2025
+随机种子已设置为 2025
+Map: 100%|█████████████████████████████████████████████████████████████████████| 1024000/1024000 [09:44<00:00, 1752.04 examples/s]
+Saving the dataset (42/42 shards): 100%|██████████████████████████████████████| 1024000/1024000 [00:18<00:00, 54677.05 examples/s]
+随机种子已设置为 2025
+Map: 100%|███████████████████████████████████████████████████████████████████████████| 5409/5409 [00:01<00:00, 3043.80 examples/s]
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/transformers/models/auto/auto_factory.py:476: FutureWarning: The `use_auth_t
+oken` argument is deprecated and will be removed in v5 of Transformers. Please use `token` instead.
+  warnings.warn(
+Map: 100%|█████████████████████████████████████████████████████████████████████| 1024000/1024000 [10:22<00:00, 1645.80 examples/s]
+Saving the dataset (42/42 shards): 100%|███████████████████████████████████████| 1024000/1024000 [03:02<00:00, 5607.40 examples/s]
+随机种子已设置为 2025
+Map: 100%|███████████████████████████████████████████████████████████████████████████| 5409/5409 [00:03<00:00, 1588.23 examples/s]
+/root/miniconda3/envs/value_agg/lib/python3.12/site-packages/transformers/models/auto/auto_factory.py:476: FutureWarning: The `use_auth_t
+oken` argument is deprecated and will be removed in v5 of Transformers. Please use `token` instead.
+  warnings.warn(
+[rank0]:W0325 21:34:47.378000 62614 site-packages/torch/utils/cpp_extension.py:2425] TORCH_CUDA_ARCH_LIST is not set, all archs for visib
+le cards are included for compilation.
+[rank0]:W0325 21:34:47.378000 62614 site-packages/torch/utils/cpp_extension.py:2425] If this is not desired, please set os.environ['TORCH
+_CUDA_ARCH_LIST'] to specific architectures.
+[2026-03-25 21:34:47,497] [WARNING] [lr_schedules.py:690:get_lr] Attempting to get learning rate from scheduler before it has started
+Epoch: 1:   0%|                                                                                          | 0/1000 [00:00<?, ?it/s][2026-0
+3-25 21:34:47,542] [WARNING] [lr_schedules.py:690:get_lr] Attempting to get learning rate from scheduler before it has started
+Evaluating: 100%|███████████████████████████████████████████████████████████████████████████████████| 6/6 [04:53<00:00, 48.98s/it]
+[Loss] alignment loss        : 0.109129█████████████████████████████████████████████████████████████| 6/6 [04:53<00:00, 42.02s/it]
+[Loss] sigreg loss           : 4425.108887
+[Loss] uniformity loss       : -1.024328
+[Gram] matrix shape        : torch.Size([1024, 1024])
+[Gram] Max eigenvalue      : 11346.150391
+[Gram] Min eigenvalue      : 0.000499
+[Gram] Sum of eigenvalues  : 16227.685547
+[Gram] Eigenvalue variance : 127641.132812
+[Cov]  matrix shape        : torch.Size([1024, 1024])
+[Cov]  Max eigenvalue      : 0.075820
+[Cov]  Min eigenvalue      : 0.000000
+[Cov]  Sum of eigenvalues  : 0.302923
+[Cov]  Eigenvalue variance : 0.000008
+Evaluating: 100%|███████████████████████████████████████████████████████████████████████████████████| 6/6 [05:01<00:00, 50.28s/it]
+[Loss] alignment loss        : 0.109129█████████████████████████████████████████████████████████████| 6/6 [05:01<00:00, 43.08s/it]
+[Loss] sigreg loss           : 4425.108887
+[Loss] uniformity loss       : -1.024328
+[Gram] matrix shape        : torch.Size([1024, 1024])
+[Gram] Max eigenvalue      : 11346.150391
+[Gram] Min eigenvalue      : 0.000499
+[Gram] Sum of eigenvalues  : 16227.685547
+[Gram] Eigenvalue variance : 127641.132812
+[Cov]  matrix shape        : torch.Size([1024, 1024])
+[Cov]  Max eigenvalue      : 0.075820
+[Cov]  Min eigenvalue      : 0.000000
+[Cov]  Sum of eigenvalues  : 0.302923
+[Cov]  Eigenvalue variance : 0.000008
+Epoch: 1:   3%|██▎                                                                        | 30/1000 [1:03:59<31:52:26, 118.30s/it]
+Evaluating:  33%|█████████████████████████████████████████████                                                                    Evaluat
+ing:  33%|█████████████████████████████████████████████
+        | 2/6 [01:53<03:46, 56.67s/it]
+Evaluating:  50%|███████████████████████████████████████████████████████████████████▌
+               | 3/6 [02:47<02:47, Evaluating:  50%|███████████████████████████████████████████████████████████████████▌
+                                                  | 3/6 [02:48<02:48, Evaluating:  67%|██████████████████████████████████████████████████
+████████████████████████████████████████                                             | 4/6 [03:42<01:51, Evaluating:  67%|███████████████
+███████████████████████████████████████████████████████████████████████████                                             | 4/6 [03:45<01:5
+2, Evaluating:  83%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████▌
+                  | 5/6 [04:37<00:55, Evaluating:  83%|██████████████████████████████████████████████████████████████████████████████████
+██████████████████████████████▌                      | 5/6 [04:40<00:55, Evaluating: 100%|███████████████████████████████████████████████
+████████████████████████████████████████████████████████████████████████████████████████| 6/6 [04:54<00:00, 49.03s/it]
+[Loss] alignment loss        : 0.350017
+[Loss] sigreg loss           : 4414.543457
+[Loss] uniformity loss       : -2.806876
+[Gram] matrix shape        : torch.Size([1024, 1024])
+[Gram] Max eigenvalue      : 4625.403320
+[Gram] Min eigenvalue      : 0.002628
+[Gram] Sum of eigenvalues  : 16230.848633
+[Gram] Eigenvalue variance : 22499.884766
+[Cov]  matrix shape        : torch.Size([1024, 1024])
+[Cov]  Max eigenvalue      : 0.054077
+[Cov]  Min eigenvalue      : 0.000000
+[Cov]  Sum of eigenvalues  : 0.719846
+[Cov]  Eigenvalue variance : 0.000007
+
+Evaluating: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████
+███████████████| 6/6 [04:56<00:00, 49.41s/it]
+[Loss] alignment loss        : 0.350017
+[Loss] sigreg loss           : 4414.543457
+[Loss] uniformity loss       : -2.806876
+[Gram] matrix shape        : torch.Size([1024, 1024])
+[Gram] Max eigenvalue      : 4625.403320
+[Gram] Min eigenvalue      : 0.002628
+[Gram] Sum of eigenvalues  : 16230.848633
+[Gram] Eigenvalue variance : 22499.884766
+[Cov]  matrix shape        : torch.Size([1024, 1024])
+[Cov]  Max eigenvalue      : 0.054077
+[Cov]  Min eigenvalue      : 0.000000
+[Cov]  Sum of eigenvalues  : 0.719846
+[Cov]  Eigenvalue variance : 0.000007
+Evaluating: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████
+█████| 6/6 [04:54<00:00, 49.06s/it]
+[Loss] alignment loss        : 0.304539██████████████████████████████████████████████████████████████████████████████████████████████████
+█████| 6/6 [04:54<00:00, 42.05s/it]
+[Loss] sigreg loss           : 4411.243164
+[Loss] uniformity loss       : -3.186788
+[Gram] matrix shape        : torch.Size([1024, 1024])
+[Gram] Max eigenvalue      : 2952.500000
+[Gram] Min eigenvalue      : 0.002781
+[Gram] Sum of eigenvalues  : 16233.194336
+[Gram] Eigenvalue variance : 9827.426758
+[Cov]  matrix shape        : torch.Size([1024, 1024])
+[Cov]  Max eigenvalue      : 0.044049
+[Cov]  Min eigenvalue      : 0.000000
+[Cov]  Sum of eigenvalues  : 0.823149
+[Cov]  Eigenvalue variance : 0.000005
+Evaluating: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████
+█████| 6/6 [04:56<00:00, 49.34s/it]
+[Loss] alignment loss        : 0.304539██████████████████████████████████████████████████████████████████████████████████████████████████
+█████| 6/6 [04:56<00:00, 42.35s/it]
+[Loss] sigreg loss           : 4411.243164
+[Loss] uniformity loss       : -3.186788
+[Gram] matrix shape        : torch.Size([1024, 1024])
+[Gram] Max eigenvalue      : 2952.500000
+[Gram] Min eigenvalue      : 0.002781
+[Gram] Sum of eigenvalues  : 16233.194336
+[Gram] Eigenvalue variance : 9827.426758
+[Cov]  matrix shape        : torch.Size([1024, 1024])
+[Cov]  Max eigenvalue      : 0.044049
+[Cov]  Min eigenvalue      : 0.000000
+[Cov]  Sum of eigenvalues  : 0.823149
+[Cov]  Eigenvalue variance : 0.000005
+Evaluating: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████
+█████| 6/6 [04:54<00:00, 49.03s/it]
+[Loss] alignment loss        : 0.313577██████████████████████████████████████████████████████████████████████████████████████████████████
+█████| 6/6 [04:54<00:00, 41.98s/it]
+[Loss] sigreg loss           : 4410.312012
+[Loss] uniformity loss       : -3.369632
+[Gram] matrix shape        : torch.Size([1024, 1024])
+[Gram] Max eigenvalue      : 2249.231934
+[Gram] Min eigenvalue      : 0.002939
+[Gram] Sum of eigenvalues  : 16231.839844
+[Gram] Eigenvalue variance : 6237.707520
+[Cov]  matrix shape        : torch.Size([1024, 1024])
+[Cov]  Max eigenvalue      : 0.043503
+[Cov]  Min eigenvalue      : 0.000000
+[Cov]  Sum of eigenvalues  : 0.866617
+[Cov]  Eigenvalue variance : 0.000005
+Evaluating: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████
+█████| 6/6 [04:57<00:00, 49.51s/it]
+[Loss] alignment loss        : 0.313577██████████████████████████████████████████████████████████████████████████████████████████████████
+█████| 6/6 [04:57<00:00, 42.35s/it]
+[Loss] sigreg loss           : 4410.312012
+[Loss] uniformity loss       : -3.369632
+[Gram] matrix shape        : torch.Size([1024, 1024])
+[Gram] Max eigenvalue      : 2249.231934
+[Gram] Min eigenvalue      : 0.002939
+[Gram] Sum of eigenvalues  : 16231.839844
+[Gram] Eigenvalue variance : 6237.707520
+[Cov]  matrix shape        : torch.Size([1024, 1024])
+[Cov]  Max eigenvalue      : 0.043503
+[Cov]  Min eigenvalue      : 0.000000
+[Cov]  Sum of eigenvalues  : 0.866617
+[Cov]  Eigenvalue variance : 0.000005
+Evaluating: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████
+█████| 6/6 [04:52<00:00, 48.79s/it]
+[Loss] alignment loss        : 0.310932██████████████████████████████████████████████████████████████████████████████████████████████████
+█████| 6/6 [04:52<00:00, 41.73s/it]
+[Loss] sigreg loss           : 4409.934570
+[Loss] uniformity loss       : -3.427716
+[Gram] matrix shape        : torch.Size([1024, 1024])
+[Gram] Max eigenvalue      : 2004.646240
+[Gram] Min eigenvalue      : 0.003085
+[Gram] Sum of eigenvalues  : 16231.221680
+[Gram] Eigenvalue variance : 5213.280273
+[Cov]  matrix shape        : torch.Size([1024, 1024])
+[Cov]  Max eigenvalue      : 0.043523
+[Cov]  Min eigenvalue      : 0.000000
+[Cov]  Sum of eigenvalues  : 0.882607
+[Cov]  Eigenvalue variance : 0.000005
+Evaluating: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████
+█████| 6/6 [04:54<00:00, 49.10s/it]
+[Loss] alignment loss        : 0.310932██████████████████████████████████████████████████████████████████████████████████████████████████
+█████| 6/6 [04:54<00:00, 42.22s/it]
+[Loss] sigreg loss           : 4409.934570
+[Loss] uniformity loss       : -3.427716
+[Gram] matrix shape        : torch.Size([1024, 1024])
+[Gram] Max eigenvalue      : 2004.646240
+[Gram] Min eigenvalue      : 0.003085
+[Gram] Sum of eigenvalues  : 16231.221680
+[Gram] Eigenvalue variance : 5213.280273
+[Cov]  matrix shape        : torch.Size([1024, 1024])
+[Cov]  Max eigenvalue      : 0.043523
+[Cov]  Min eigenvalue      : 0.000000
+[Cov]  Sum of eigenvalues  : 0.882607
+[Cov]  Eigenvalue variance : 0.000005
+Evaluating: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████
+█████| 6/6 [04:49<00:00, 48.20s/it]
+[Loss] alignment loss        : 0.320736██████████████████████████████████████████████████████████████████████████████████████████████████
+█████| 6/6 [04:49<00:00, 41.40s/it]
+[Loss] sigreg loss           : 4409.675781
+[Loss] uniformity loss       : -3.469399
+[Gram] matrix shape        : torch.Size([1024, 1024])
+[Gram] Max eigenvalue      : 1830.365723
+[Gram] Min eigenvalue      : 0.003221
+[Gram] Sum of eigenvalues  : 16231.468750
+[Gram] Eigenvalue variance : 4634.826660
+[Cov]  matrix shape        : torch.Size([1024, 1024])
+[Cov]  Max eigenvalue      : 0.047027
+[Cov]  Min eigenvalue      : 0.000000
+[Cov]  Sum of eigenvalues  : 0.894915
+[Cov]  Eigenvalue variance : 0.000006
+Evaluating: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████
+█████| 6/6 [04:53<00:00, 48.98s/it]
+[Loss] alignment loss        : 0.320736██████████████████████████████████████████████████████████████████████████████████████████████████
+█████| 6/6 [04:53<00:00, 41.97s/it]
+[Loss] sigreg loss           : 4409.675781
+[Loss] uniformity loss       : -3.469399
+[Gram] matrix shape        : torch.Size([1024, 1024])
+[Gram] Max eigenvalue      : 1830.365723
+[Gram] Min eigenvalue      : 0.003221
+[Gram] Sum of eigenvalues  : 16231.468750
+[Gram] Eigenvalue variance : 4634.826660
+[Cov]  matrix shape        : torch.Size([1024, 1024])
+[Cov]  Max eigenvalue      : 0.047027
+[Cov]  Min eigenvalue      : 0.000000
+[Cov]  Sum of eigenvalues  : 0.894915
+[Cov]  Eigenvalue variance : 0.000006
+Evaluating: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████
+█████| 6/6 [04:50<00:00, 48.43s/it]
+[Loss] alignment loss        : 0.329416██████████████████████████████████████████████████████████████████████████████████████████████████
+█████| 6/6 [04:50<00:00, 41.69s/it]
+[Loss] sigreg loss           : 4408.908691
+[Loss] uniformity loss       : -3.577410
+[Gram] matrix shape        : torch.Size([1024, 1024])
+[Gram] Max eigenvalue      : 1435.000488
+[Gram] Min eigenvalue      : 0.003348
+[Gram] Sum of eigenvalues  : 16231.046875
+[Gram] Eigenvalue variance : 3384.545898
+[Cov]  matrix shape        : torch.Size([1024, 1024])
+[Cov]  Max eigenvalue      : 0.048881
+[Cov]  Min eigenvalue      : 0.000000
+[Cov]  Sum of eigenvalues  : 0.921340
+[Cov]  Eigenvalue variance : 0.000006
+Evaluating: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████
+█████| 6/6 [04:52<00:00, 48.83s/it]
+[Loss] alignment loss        : 0.329416██████████████████████████████████████████████████████████████████████████████████████████████████
+█████| 6/6 [04:52<00:00, 41.85s/it]
+[Loss] sigreg loss           : 4408.908691
+[Loss] uniformity loss       : -3.577410
+[Gram] matrix shape        : torch.Size([1024, 1024])
+[Gram] Max eigenvalue      : 1435.000488
+[Gram] Min eigenvalue      : 0.003348
+[Gram] Sum of eigenvalues  : 16231.046875
+[Gram] Eigenvalue variance : 3384.545898
+[Cov]  matrix shape        : torch.Size([1024, 1024])
+[Cov]  Max eigenvalue      : 0.048881
+[Cov]  Min eigenvalue      : 0.000000
+[Cov]  Sum of eigenvalues  : 0.921340
+[Cov]  Eigenvalue variance : 0.000006
+Evaluating: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████
+█████| 6/6 [04:51<00:00, 48.53s/it]
+[Loss] alignment loss        : 0.316455██████████████████████████████████████████████████████████████████████████████████████████████████
+█████| 6/6 [04:51<00:00, 41.88s/it]
+[Loss] sigreg loss           : 4408.926270
+[Loss] uniformity loss       : -3.581714
+[Gram] matrix shape        : torch.Size([1024, 1024])
+[Gram] Max eigenvalue      : 1424.237061
+[Gram] Min eigenvalue      : 0.003351
+[Gram] Sum of eigenvalues  : 16230.102539
+[Gram] Eigenvalue variance : 3498.972656
+[Cov]  matrix shape        : torch.Size([1024, 1024])
+[Cov]  Max eigenvalue      : 0.054239
+[Cov]  Min eigenvalue      : 0.000000
+[Cov]  Sum of eigenvalues  : 0.924775
+[Cov]  Eigenvalue variance : 0.000007
+Evaluating: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████
+█████| 6/6 [04:53<00:00, 48.88s/it]
+[Loss] alignment loss        : 0.316455██████████████████████████████████████████████████████████████████████████████████████████████████
+█████| 6/6 [04:53<00:00, 42.09s/it]
+[Loss] sigreg loss           : 4408.926270
+[Loss] uniformity loss       : -3.581714
+[Gram] matrix shape        : torch.Size([1024, 1024])
+[Gram] Max eigenvalue      : 1424.237061
+[Gram] Min eigenvalue      : 0.003351
+[Gram] Sum of eigenvalues  : 16230.102539
+[Gram] Eigenvalue variance : 3498.972656
+[Cov]  matrix shape        : torch.Size([1024, 1024])
+[Cov]  Max eigenvalue      : 0.054239
+[Cov]  Min eigenvalue      : 0.000000
+[Cov]  Sum of eigenvalues  : 0.924775
+[Cov]  Eigenvalue variance : 0.000007
+Evaluating: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████
+█████| 6/6 [04:50<00:00, 48.49s/it]
+[Loss] alignment loss        : 0.318327██████████████████████████████████████████████████████████████████████████████████████████████████
+█████| 6/6 [04:50<00:00, 41.63s/it]
+[Loss] sigreg loss           : 4408.506348
+[Loss] uniformity loss       : -3.577030
+[Gram] matrix shape        : torch.Size([1024, 1024])
+[Gram] Max eigenvalue      : 1338.815186
+[Gram] Min eigenvalue      : 0.003499
+[Gram] Sum of eigenvalues  : 16229.939453
+[Gram] Eigenvalue variance : 3300.385498
+[Cov]  matrix shape        : torch.Size([1024, 1024])
+[Cov]  Max eigenvalue      : 0.054447
+[Cov]  Min eigenvalue      : 0.000000
+[Cov]  Sum of eigenvalues  : 0.927148
+[Cov]  Eigenvalue variance : 0.000006
+Evaluating: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████
+█████| 6/6 [04:55<00:00, 49.18s/it]
+[Loss] alignment loss        : 0.318327██████████████████████████████████████████████████████████████████████████████████████████████████
+█████| 6/6 [04:55<00:00, 42.24s/it]
+[Loss] sigreg loss           : 4408.506348
+[Loss] uniformity loss       : -3.577030
+[Gram] matrix shape        : torch.Size([1024, 1024])
+[Gram] Max eigenvalue      : 1338.815186
+[Gram] Min eigenvalue      : 0.003499
+[Gram] Sum of eigenvalues  : 16229.939453
+[Gram] Eigenvalue variance : 3300.385498
+[Cov]  matrix shape        : torch.Size([1024, 1024])
+[Cov]  Max eigenvalue      : 0.054447
+[Cov]  Min eigenvalue      : 0.000000
+[Cov]  Sum of eigenvalues  : 0.927148
+[Cov]  Eigenvalue variance : 0.000006
+Evaluating: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████
+█████| 6/6 [04:53<00:00, 48.99s/it]
+[Loss] alignment loss        : 0.322584██████████████████████████████████████████████████████████████████████████████████████████████████
+█████| 6/6 [04:53<00:00, 42.01s/it]
+[Loss] sigreg loss           : 4408.425781
+[Loss] uniformity loss       : -3.597306
+[Gram] matrix shape        : torch.Size([1024, 1024])
+[Gram] Max eigenvalue      : 1275.187988
+[Gram] Min eigenvalue      : 0.003648
+[Gram] Sum of eigenvalues  : 16229.774414
+[Gram] Eigenvalue variance : 3159.712891
+[Cov]  matrix shape        : torch.Size([1024, 1024])
+[Cov]  Max eigenvalue      : 0.055881
+[Cov]  Min eigenvalue      : 0.000000
+[Cov]  Sum of eigenvalues  : 0.932306
+[Cov]  Eigenvalue variance : 0.000007
+Evaluating: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████
+█████| 6/6 [04:55<00:00, 49.25s/it]
+[Loss] alignment loss        : 0.322584██████████████████████████████████████████████████████████████████████████████████████████████████
+█████| 6/6 [04:55<00:00, 42.39s/it]
+[Loss] sigreg loss           : 4408.425781
+[Loss] uniformity loss       : -3.597306
+[Gram] matrix shape        : torch.Size([1024, 1024])
+[Gram] Max eigenvalue      : 1275.187988
+[Gram] Min eigenvalue      : 0.003648
+[Gram] Sum of eigenvalues  : 16229.774414
+[Gram] Eigenvalue variance : 3159.712891
+[Cov]  matrix shape        : torch.Size([1024, 1024])
+[Cov]  Max eigenvalue      : 0.055881
+[Cov]  Min eigenvalue      : 0.000000
+[Cov]  Sum of eigenvalues  : 0.932306
+[Cov]  Eigenvalue variance : 0.000007
+Evaluating: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████
+█████| 6/6 [04:49<00:00, 48.31s/it]
+[Loss] alignment loss        : 0.329674██████████████████████████████████████████████████████████████████████████████████████████████████
+█████| 6/6 [04:49<00:00, 41.56s/it]
+[Loss] sigreg loss           : 4408.848633
+[Loss] uniformity loss       : -3.582831
+[Gram] matrix shape        : torch.Size([1024, 1024])
+[Gram] Max eigenvalue      : 1378.004150
+[Gram] Min eigenvalue      : 0.003661
+[Gram] Sum of eigenvalues  : 16230.300781
+[Gram] Eigenvalue variance : 3300.714844
+[Cov]  matrix shape        : torch.Size([1024, 1024])
+[Cov]  Max eigenvalue      : 0.054082
+[Cov]  Min eigenvalue      : 0.000000
+[Cov]  Sum of eigenvalues  : 0.925516
+[Cov]  Eigenvalue variance : 0.000006
+Evaluating: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████
+█████| 6/6 [04:54<00:00, 49.06s/it]
+[Loss] alignment loss        : 0.329674██████████████████████████████████████████████████████████████████████████████████████████████████
+█████| 6/6 [04:54<00:00, 42.10s/it]
+[Loss] sigreg loss           : 4408.848633
+[Loss] uniformity loss       : -3.582831
+[Gram] matrix shape        : torch.Size([1024, 1024])
+[Gram] Max eigenvalue      : 1378.004150
+[Gram] Min eigenvalue      : 0.003661
+[Gram] Sum of eigenvalues  : 16230.300781
+[Gram] Eigenvalue variance : 3300.714844
+[Cov]  matrix shape        : torch.Size([1024, 1024])
+[Cov]  Max eigenvalue      : 0.054082
+[Cov]  Min eigenvalue      : 0.000000
+[Cov]  Sum of eigenvalues  : 0.925516
+[Cov]  Eigenvalue variance : 0.000006
+Evaluating: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████
+█████| 6/6 [05:11<00:00, 51.97s/it]
+[Loss] alignment loss        : 0.304306██████████████████████████████████████████████████████████████████████████████████████████████████
+█████| 6/6 [05:11<00:00, 44.06s/it]
+[Loss] sigreg loss           : 4409.067383
+[Loss] uniformity loss       : -3.515010
+[Gram] matrix shape        : torch.Size([1024, 1024])
+[Gram] Max eigenvalue      : 1539.320801
+[Gram] Min eigenvalue      : 0.003373
+[Gram] Sum of eigenvalues  : 16230.037109
+[Gram] Eigenvalue variance : 3991.951660
+[Cov]  matrix shape        : torch.Size([1024, 1024])
+[Cov]  Max eigenvalue      : 0.058757
+[Cov]  Min eigenvalue      : 0.000000
+[Cov]  Sum of eigenvalues  : 0.915318
+[Cov]  Eigenvalue variance : 0.000007
+Evaluating: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████
+█████| 6/6 [05:08<00:00, 51.50s/it]
+[Loss] alignment loss        : 0.304306██████████████████████████████████████████████████████████████████████████████████████████████████
+█████| 6/6 [05:08<00:00, 43.45s/it]
+[Loss] sigreg loss           : 4409.067383
+[Loss] uniformity loss       : -3.515010
+[Gram] matrix shape        : torch.Size([1024, 1024])
+[Gram] Max eigenvalue      : 1539.320801
+[Gram] Min eigenvalue      : 0.003373
+[Gram] Sum of eigenvalues  : 16230.037109
+[Gram] Eigenvalue variance : 3991.951660
+[Cov]  matrix shape        : torch.Size([1024, 1024])
+[Cov]  Max eigenvalue      : 0.058757
+[Cov]  Min eigenvalue      : 0.000000
+[Cov]  Sum of eigenvalues  : 0.915318
+[Cov]  Eigenvalue variance : 0.000007
+Evaluating: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████
+█████| 6/6 [04:48<00:00, 48.07s/it]
+[Loss] alignment loss        : 0.319761██████████████████████████████████████████████████████████████████████████████████████████████████
+█████| 6/6 [04:48<00:00, 41.07s/it]
+[Loss] sigreg loss           : 4408.665039
+[Loss] uniformity loss       : -3.572191
+[Gram] matrix shape        : torch.Size([1024, 1024])
+[Gram] Max eigenvalue      : 1375.803467
+[Gram] Min eigenvalue      : 0.003599
+[Gram] Sum of eigenvalues  : 16228.939453
+[Gram] Eigenvalue variance : 3313.819336
+[Cov]  matrix shape        : torch.Size([1024, 1024])
+[Cov]  Max eigenvalue      : 0.054417
+[Cov]  Min eigenvalue      : 0.000000
+[Cov]  Sum of eigenvalues  : 0.924749
+[Cov]  Eigenvalue variance : 0.000006
+Evaluating: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████
+█████| 6/6 [04:55<00:00, 49.33s/it]
+[Loss] alignment loss        : 0.319761██████████████████████████████████████████████████████████████████████████████████████████████████
+█████| 6/6 [04:55<00:00, 42.31s/it]
+[Loss] sigreg loss           : 4408.665039
+[Loss] uniformity loss       : -3.572191
+[Gram] matrix shape        : torch.Size([1024, 1024])
+[Gram] Max eigenvalue      : 1375.803467
+[Gram] Min eigenvalue      : 0.003599
+[Gram] Sum of eigenvalues  : 16228.939453
+[Gram] Eigenvalue variance : 3313.819336
+[Cov]  matrix shape        : torch.Size([1024, 1024])
+[Cov]  Max eigenvalue      : 0.054417
+[Cov]  Min eigenvalue      : 0.000000
+[Cov]  Sum of eigenvalues  : 0.924749
+[Cov]  Eigenvalue variance : 0.000006
+Evaluating: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████
+█████| 6/6 [04:53<00:00, 48.98s/it]
+[Loss] alignment loss        : 0.317274██████████████████████████████████████████████████████████████████████████████████████████████████
+█████| 6/6 [04:53<00:00, 42.04s/it]
+[Loss] sigreg loss           : 4408.776367
+[Loss] uniformity loss       : -3.566711
+[Gram] matrix shape        : torch.Size([1024, 1024])
+[Gram] Max eigenvalue      : 1388.999268
+[Gram] Min eigenvalue      : 0.003675
+[Gram] Sum of eigenvalues  : 16229.798828
+[Gram] Eigenvalue variance : 3435.030518
+[Cov]  matrix shape        : torch.Size([1024, 1024])
+[Cov]  Max eigenvalue      : 0.056010
+[Cov]  Min eigenvalue      : 0.000000
+[Cov]  Sum of eigenvalues  : 0.924259
+[Cov]  Eigenvalue variance : 0.000006
+Evaluating: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████
+█████| 6/6 [04:55<00:00, 49.22s/it]
+[Loss] alignment loss        : 0.317274██████████████████████████████████████████████████████████████████████████████████████████████████
+█████| 6/6 [04:55<00:00, 42.24s/it]
+[Loss] sigreg loss           : 4408.776367
+[Loss] uniformity loss       : -3.566711
+[Gram] matrix shape        : torch.Size([1024, 1024])
+[Gram] Max eigenvalue      : 1388.999268
+[Gram] Min eigenvalue      : 0.003675
+[Gram] Sum of eigenvalues  : 16229.798828
+[Gram] Eigenvalue variance : 3435.030518
+[Cov]  matrix shape        : torch.Size([1024, 1024])
+[Cov]  Max eigenvalue      : 0.056010
+[Cov]  Min eigenvalue      : 0.000000
+[Cov]  Sum of eigenvalues  : 0.924259
+[Cov]  Eigenvalue variance : 0.000006
+Evaluating: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████
+█████| 6/6 [04:52<00:00, 48.70s/it]
+[Loss] alignment loss        : 0.306160██████████████████████████████████████████████████████████████████████████████████████████████████
+█████| 6/6 [04:52<00:00, 41.81s/it]
+[Loss] sigreg loss           : 4408.652344
+[Loss] uniformity loss       : -3.552596
+[Gram] matrix shape        : torch.Size([1024, 1024])
+[Gram] Max eigenvalue      : 1449.504395
+[Gram] Min eigenvalue      : 0.003540
+[Gram] Sum of eigenvalues  : 16229.489258
+[Gram] Eigenvalue variance : 3660.145264
+[Cov]  matrix shape        : torch.Size([1024, 1024])
+[Cov]  Max eigenvalue      : 0.057051
+[Cov]  Min eigenvalue      : 0.000000
+[Cov]  Sum of eigenvalues  : 0.921736
+[Cov]  Eigenvalue variance : 0.000007
+Evaluating: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████
+█████| 6/6 [04:53<00:00, 48.95s/it]
+[Loss] alignment loss        : 0.306160██████████████████████████████████████████████████████████████████████████████████████████████████
+█████| 6/6 [04:53<00:00, 41.78s/it]
+[Loss] sigreg loss           : 4408.652344
+[Loss] uniformity loss       : -3.552596
+[Gram] matrix shape        : torch.Size([1024, 1024])
+[Gram] Max eigenvalue      : 1449.504395
+[Gram] Min eigenvalue      : 0.003540
+[Gram] Sum of eigenvalues  : 16229.489258
+[Gram] Eigenvalue variance : 3660.145264
+[Cov]  matrix shape        : torch.Size([1024, 1024])
+[Cov]  Max eigenvalue      : 0.057051
+[Cov]  Min eigenvalue      : 0.000000
+[Cov]  Sum of eigenvalues  : 0.921736
+[Cov]  Eigenvalue variance : 0.000007
+Epoch: 1:  45%|████████████████████████████████▊                                        | 449/1000 [15:50:11<18:28:28, 120.70s/it]   ^Af
