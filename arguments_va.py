@@ -14,7 +14,7 @@ class DataTrainingArguments:
 @dataclass
 class ModelArguments:
     model_name: Optional[str] = field(
-        default="/root/autodl-tmp/hf_cache/Qwen3-0.6B",
+        default="Qwen/Qwen3-8B",
         metadata={
             "help": "The model checkpoint for weights initialization. Don't set if you want to train a model from scratch."
         },
@@ -38,5 +38,5 @@ class TrainingArguments:
     )
     local_rank: Optional[int] = field(default=0)
     train_epoch: Optional[int] = field(default=1)
-    train_batch_size: Optional[int] = field(default=128)
+    train_batch_size: Optional[int] = field(default=1024)
     dropout_rate: float = field(default=0.0)

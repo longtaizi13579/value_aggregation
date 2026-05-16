@@ -1706,7 +1706,7 @@ class F_PPVA(nn.Module):
     def __init__(self, local_rank=0, model_name=None) -> None:
         super().__init__()
         if model_name is None:
-            model_name = "Qwen/Qwen3-0.6B"
+            model_name = "Qwen/Qwen3-8B"
         self.model = VaQwen3ForCausalLM.from_pretrained(
             model_name,
             use_auth_token=use_auth_token

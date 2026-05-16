@@ -34,7 +34,7 @@
     },
     "gradient_accumulation_steps": 1,
     "steps_per_print": 100,
-    "train_batch_size": 512,
-    "train_micro_batch_size_per_gpu": 256,
+    "train_batch_size": 1024,
+    "train_micro_batch_size_per_gpu":  128,
     "wall_clock_breakdown": false
 }
