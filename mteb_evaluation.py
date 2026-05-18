@@ -212,7 +212,7 @@ class MyModel():
             output_embedding = []
             for start_index in tqdm(range(0, len(sentences), self.batch_size), desc="Batches"):
                 sentences_batch = sentences[start_index:start_index + self.batch_size]
-                output_embedding.append(self.n_steps_embedding(sentences_batch, is_query=self.is_query).cpu())
+                output_embedding.append(self.value_aggregation(sentences_batch, is_query=self.is_query).cpu())
             self.is_query = False
             return torch.cat(output_embedding, dim=0)
     
@@ -297,10 +297,10 @@ model = F_PPVA_Eval(training_args.local_rank, model_args.model_name)
 checkpoint_path = model_args.checkpoint_path
 checkpoint = torch.load(checkpoint_path)
 model.load_state_dict(checkpoint['module'], strict=True)
-for each_task in ['Banking77Classification']:#['Banking77Classification', 'EmotionClassification','ArguAna', 'SciFact', 'STS17', 'NFCorpus', 'SICK-R', 'STSBenchmark', 'MedrxivClusteringS2S', 'StackOverflowDupQuestions', 'TwentyNewsgroupsClustering', 'BiorxivClusteringS2S', 'SciDocsRR', 'SprintDuplicateQuestions']:
+for each_task in ['Banking77Classification', 'EmotionClassification','ArguAna', 'SciFact', 'STS17', 'NFCorpus', 'SICK-R', 'STSBenchmark', 'MedrxivClusteringS2S', 'StackOverflowDupQuestions', 'TwentyNewsgroupsClustering', 'BiorxivClusteringS2S', 'SciDocsRR', 'SprintDuplicateQuestions']:#['Banking77Classification', 'EmotionClassification','ArguAna', 'SciFact', 'STS17', 'NFCorpus', 'SICK-R', 'STSBenchmark', 'MedrxivClusteringS2S', 'StackOverflowDupQuestions', 'TwentyNewsgroupsClustering', 'BiorxivClusteringS2S', 'SciDocsRR', 'SprintDuplicateQuestions']:
     mymodel = MyModel(model, tokenizer, data_args, each_task)
     evaluation = MTEB(tasks=[each_task])
-    results = evaluation.run(mymodel, output_folder=f"5_2_qwen3_0.6b_fppva", eval_splits=["test"])
+    results = evaluation.run(mymodel, output_folder=f"5_18_qwen3_8b_fppva", eval_splits=["test"])
 # model2 = AutoModel.from_pretrained('Qwen/Qwen3-Embedding-0.6B')
 # for each_task in ['SICK-R']:
 #     mymodel = MyModel(model, tokenizer, data_args, each_task)

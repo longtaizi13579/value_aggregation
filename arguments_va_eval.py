@@ -14,7 +14,7 @@ class DataTrainingArguments:
 @dataclass
 class ModelArguments:
     model_name: Optional[str] = field(
-        default="/root/autodl-tmp/hf_cache/Qwen3-0.6B",
+        default="Qwen/Qwen3-8B",
         metadata={
             "help": "The model checkpoint for weights initialization. Don't set if you want to train a model from scratch."
         },
