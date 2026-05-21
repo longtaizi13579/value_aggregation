@@ -607,7 +607,7 @@ for epoch in range(training_args.train_epoch):
         current_lr = model_engine.get_lr()[0]
         if training_args.local_rank == 0:
             logger.info(
-                f"Epoch: {epoch + 1}, Batch: {idx + 1}, Loss: {loss.item()}, Regularization Loss: {r_loss.item()}, LR: {current_lr}"
+                f"Epoch: {epoch + 1}, Batch: {idx + 1}, Loss: {loss.item()}, Regularization Loss: {h_loss.item()}, LR: {current_lr}"
             )
 
         if (idx + 1) % 200 == 0:
