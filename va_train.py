@@ -261,13 +261,87 @@ def SIGReg(x, global_step, num_slices=256):
     # 5. 所有投影方向的损失均值
     return T.mean()
 
-# def regularization_loss(full_query_embedding, full_positive_embedding, full_negative_embedding):
-    # all_embeddings = torch.cat([full_query_embedding, full_positive_embedding, full_negative_embedding], dim=0) # 3*b, d
-    # gram_matrix = all_embeddings.T @ all_embeddings # d, d， gram 矩阵
-    # gram_matrix_abs_wo_diag = torch.abs(gram_matrix.clone())
-    # gram_matrix_abs_wo_diag[torch.eye(gram_matrix.shape[0]).to(torch.bool)] = 0
-    # gram_matrix = gram_matrix.diag() - torch.mean(gram_matrix_abs_wo_diag, dim=0)
-    # loss = 1 - min(gram_matrix)
+# ==========================
+# HamJEPA 3大正则损失 实现
+# ==========================
+def hamjepa_scale_budget_loss(z, target_norm=1.0):
+    """
+    1. Fixed-units scale budget (anti-gauge) loss
+    让每个 embedding 的范数接近 target_norm
+    """
+    norm = z.norm(dim=-1)
+    loss = (norm - target_norm).pow(2).mean()
+    return loss
+
+
+def hamjepa_projected_logdet_loss(z, proj_dim=64, eps=1e-6):
+    """
+    2. Projected log-det volume floor loss
+    随机投影 → 算小矩阵协方差 → 最大化对数行列式（防坍缩）
+    """
+    B, D = z.shape
+    device = z.device
+
+    # 随机正交投影（论文标准做法）
+    proj = torch.randn(D, proj_dim, device=device)
+    proj = torch.linalg.qr(proj)[0]  # 正交化
+
+    # 投影
+    z_proj = z @ proj  # (B, proj_dim)
+
+    # 中心化
+    z_proj = z_proj - z_proj.mean(dim=0, keepdim=True)
+
+    # 协方差矩阵
+    cov = (z_proj.T @ z_proj) / (B - 1) + eps * torch.eye(proj_dim, device=device)
+
+    # 对数行列式（希望越大越好 → 取负成为损失）
+    log_det = torch.logdet(cov)
+    loss = -log_det / proj_dim  # 归一化
+    return loss
+
+
+def hamjepa_participation_ratio_loss(z, proj_dim=64, target_pr=8.0, eps=1e-6):
+    """
+    3. Participation ratio floor loss
+    防止 one-spike（单方向独大）
+    PR = tr(Σ)² / tr(Σ²)
+    希望 PR ≥ target_pr
+    """
+    B, D = z.shape
+    device = z.device
+
+    # 同样用投影降维
+    proj = torch.randn(D, proj_dim, device=device)
+    proj = torch.linalg.qr(proj)[0]
+    z_proj = z @ proj
+    z_proj = z_proj - z_proj.mean(dim=0, keepdim=True)
+
+    cov = (z_proj.T @ z_proj) / (B - 1) + eps * torch.eye(proj_dim, device=device)
+
+    # 特征值
+    eig_vals = torch.linalg.eigvalsh(cov)
+    tr1 = eig_vals.sum()
+    tr2 = (eig_vals ** 2).sum()
+
+    pr = tr1 ** 2 / (tr2 + eps)
+
+    # 希望 pr ≥ target_pr → 小于则惩罚
+    loss = F.relu(target_pr - pr).mean()
+    return loss
+
+
+def HamJEPAReg(z, proj_dim=64, target_norm=1.0, target_pr=8.0):
+    """
+    合并 HamJEPA 3 大正则损失
+    """
+    loss_scale = hamjepa_scale_budget_loss(z, target_norm)
+    loss_vol = hamjepa_projected_logdet_loss(z, proj_dim)
+    loss_pr = hamjepa_participation_ratio_loss(z, proj_dim, target_pr)
+
+    # 加权（论文常用系数，可微调）
+    total_reg = 1.0 * loss_scale + 0.1 * loss_vol + 0.1 * loss_pr
+    return total_reg
 
 
 
@@ -518,8 +592,15 @@ for epoch in range(training_args.train_epoch):
         # r_loss = regularization_loss(full_query_embedding, full_positive_embedding, full_negative_embedding)
         all_embeddings = torch.cat([full_query_embedding, full_positive_embedding, full_negative_embedding], dim=0)
         norm_embeddings = normalize_embedding(all_embeddings)
-        r_loss = SIGReg(norm_embeddings, idx)
-        final_loss = loss + r_loss
+        # r_loss = SIGReg(norm_embeddings, idx)
+        # final_loss = loss + r_loss
+        h_loss = HamJEPAReg(
+                norm_embeddings,
+                proj_dim=64,     # 投影维度（论文 64/128）
+                target_norm=1.0, # 目标范数
+                target_pr=8.0    # 最小参与率
+            )
+        final_loss = loss + h_loss
 
         model_engine.backward(final_loss)
 
