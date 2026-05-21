@@ -16,7 +16,7 @@ from datasets import Dataset
 from transformers import AutoTokenizer, HfArgumentParser
 
 from arguments_va import ModelArguments, DataTrainingArguments, TrainingArguments
-from models import F_PPVA
+from models import F_PPVA, InfoNCE_LastTokenTraining
 from loss_utils import mismatched_sizes_all_gather
 use_auth_token = os.getenv("HUGGING_FACE_TOKEN")
 
@@ -501,7 +501,7 @@ os.makedirs("./wiki_train", exist_ok=True)
 logging.basicConfig(
     filename=os.path.join(
         "./wiki_train",
-        f"5_16_wiki_va_scl_{exp_id}.log",
+        f"5_21_wiki_va_scl_{exp_id}.log",
     ),
     level=logging.INFO,
     format="%(name)s - %(levelname)s - %(message)s",
@@ -549,7 +549,8 @@ encode_ds.set_format(
 # ========= 模型与 DeepSpeed =========
 torch.cuda.set_device(training_args.local_rank)
 
-model = F_PPVA(training_args.local_rank, model_args.model_name)
+# model = F_PPVA(training_args.local_rank, model_args.model_name)
+model = InfoNCE_LastTokenTraining(training_args.local_rank, model_args.model_name)
 
 # checkpoint_path = "/root/autodl-tmp/va_embedding_epoch_0_step_599__root_autodl-tmp_hf_cache_Qwen3-0.6B_bs_1024_lambda_0.0/global_step599/mp_rank_00_model_states.pt"
 # checkpoint = torch.load(checkpoint_path)

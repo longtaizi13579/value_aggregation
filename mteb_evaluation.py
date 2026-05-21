@@ -201,7 +201,7 @@ class MyModel():
     #         return torch.cat(output_embedding, dim=0)
 
     def encode(self, sentences, **kwargs):
-        if kwargs["prompt_name"] in ["ArguAna", "SciFact", "NFCorpus"]:
+        if kwargs["task_name"] in ["ArguAna", "SciFact", "NFCorpus"]:
             if self.global_count == 0:
                 sentences = [self.prompt + '\n' + text for text in sentences]
                 self.is_query = True
@@ -212,15 +212,15 @@ class MyModel():
             output_embedding = []
             for start_index in tqdm(range(0, len(sentences), self.batch_size), desc="Batches"):
                 sentences_batch = sentences[start_index:start_index + self.batch_size]
-                output_embedding.append(self.value_aggregation(sentences_batch, is_query=self.is_query).cpu())
+                output_embedding.append(self.value_aggregation(sentences_batch).cpu())
             self.is_query = False
             return torch.cat(output_embedding, dim=0)
     
     
-    def value_aggregation(self, sentences_batch, is_query=False):
+    def value_aggregation(self, sentences_batch):
         inputs = self.tokenizer(sentences_batch, add_special_tokens=True, padding=True, max_length=self.max_length, return_tensors='pt')
         inputs = {k:v.cuda() for k,v in inputs.items()}
-        embeddings = self.model(inputs['input_ids'], inputs['attention_mask'], is_query=is_query)
+        embeddings = self.model(inputs['input_ids'], inputs['attention_mask'])
         return embeddings.to(torch.float32)
 
 

@@ -1867,3 +1867,96 @@ class F_PPVA_Eval(nn.Module):
             input_ids, attention_mask
         )
         return current_embedding
+
+
+
+class InfoNCE_LastTokenTraining(nn.Module):
+    def __init__(self, local_rank=0, model_name=None) -> None:
+        super().__init__()
+        if model_name is None:
+            model_name = "Qwen/Qwen3-8B"
+        self.model = Qwen3ForCausalLM.from_pretrained(
+            model_name,
+            use_auth_token=use_auth_token
+        )
+        self.tokenizer = AutoTokenizer.from_pretrained(
+            model_name,
+            use_auth_token=use_auth_token
+        )
+        torch.cuda.set_device(local_rank)
+        self.dim = self.model.config.hidden_size
+        lora_config = LoraConfig(
+            r=16,
+            target_modules=["q_proj", "v_proj", "o_proj", "down_proj", "up_proj", "gate_proj"],
+            task_type=TaskType.FEATURE_EXTRACTION,
+            lora_alpha=32,
+            lora_dropout=0.05,
+        )
+        # 给 backbone 注入 LoRA
+        self.model = get_peft_model(self.model, lora_config)
+        self.model_wrapper()
+    
+    def _encode_in_chunks(self, input_ids, attention_mask):
+        """
+        手动按 batch 维切块 + checkpoint，以减小显存占用。
+        """
+        device = input_ids.device
+        dummy_tensor = torch.ones(
+            1,
+            dtype=torch.float32,
+            device=device,
+            requires_grad=True,
+        )
+        embeddings = []
+
+        for start in range(0, input_ids.size(0), self.encoder_gpu_train_limit):
+            end = start + self.encoder_gpu_train_limit
+            sub_input_ids = input_ids[start:end]
+            sub_attention_mask = attention_mask[start:end]
+            sub_emb = checkpoint(
+                self.model,  
+                sub_input_ids,
+                sub_attention_mask,
+                dummy_tensor,
+                use_reentrant=True
+            )  # [sub_B, H]
+            embeddings.append(sub_emb)
+
+        return torch.cat(embeddings, dim=0)  # [B, H]
+
+    
+    def model_wrapper(self):
+        # 用 EncoderWrapperSupervisedLastToken 包一下，forward 输出的是句子级 embedding
+        self.model = EncoderWrapperSupervisedLastToken(self.model)
+        self.encoder_gpu_train_limit = 8
+        self.scale = 1
+
+
+    def forward(
+        self,
+        query_input_ids,
+        positive_input_ids,
+        negative_input_ids,
+        query_attention_mask,
+        positive_attention_mask,
+        negative_attention_mask,
+    ):
+        query_embedding = self._encode_in_chunks(
+            query_input_ids, query_attention_mask
+        )
+        positive_embedding = self._encode_in_chunks(
+            positive_input_ids, positive_attention_mask
+        )
+        negative_embedding = self._encode_in_chunks(
+            negative_input_ids, negative_attention_mask
+        )
+        # E5 / InfoNCE 风格：句向量 L2 归一化，用归一化后的点积当余弦
+        query_weight_embedding_norm = F.normalize(query_embedding, p=2, dim=-1)
+        positive_weight_embedding_norm = F.normalize(positive_embedding, p=2, dim=-1)
+        negative_weight_embedding_norm = F.normalize(negative_embedding, p=2, dim=-1)
+
+        return (
+            query_weight_embedding_norm,
+            positive_weight_embedding_norm,
+            negative_weight_embedding_norm,
+        )
