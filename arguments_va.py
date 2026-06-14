@@ -14,7 +14,7 @@ class DataTrainingArguments:
 @dataclass
 class ModelArguments:
     model_name: Optional[str] = field(
-        default="meta-llama/Llama-2-7b-chat-hf",
+        default="Qwen/Qwen3-0.6B",
         metadata={
             "help": "The model checkpoint for weights initialization. Don't set if you want to train a model from scratch."
         },

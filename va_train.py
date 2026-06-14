@@ -7,15 +7,13 @@ import numpy as np
 import torch
 import torch.nn.functional as F
 from torch.utils.data import DataLoader, DistributedSampler
-import torch.optim as optim
 import deepspeed
 from tqdm import tqdm
-from peft import LoraConfig, TaskType, get_peft_model
 from datasets import Dataset
 from transformers import AutoTokenizer, HfArgumentParser
 
 from arguments_va import ModelArguments, DataTrainingArguments, TrainingArguments
-from models import Value_Aggregation_Gather, VAPPT_Gather, InforNCE_and_Eigenvalue
+from models import InforNCE_and_Eigenvalue
 from loss_utils import mismatched_sizes_all_gather
 use_auth_token = os.getenv("HUGGING_FACE_TOKEN")
 
@@ -74,34 +72,26 @@ def load_data_and_sampling(file_path: str):
     """
     读取 file_path 下所有 jsonl 文件，构造 query / positive / negative。
     """
-    all_files = os.listdir(file_path)
+    all_files = sorted(f for f in os.listdir(file_path) if f.endswith(".jsonl"))
     all_data = []
-    idx = 0
 
     for every_file in tqdm(all_files, desc="Loading raw data"):
         print(every_file)
         now_file = os.path.join(file_path, every_file)
         base_name = every_file[:-6]  # 假设文件名类似 allnli.jsonl
+        if base_name not in Instructions:
+            raise ValueError(f"未找到 {base_name} 对应的任务 instruction 配置")
 
         with open(now_file, "r", encoding="utf-8") as f:
             for line in f:
-                idx += 1
-                inst_cfg = Instructions[base_name]
-                if isinstance(inst_cfg, str):
-                    instruction = inst_cfg
-                else:
-                    # quora_duplicates: 两条描述交替使用
-                    instruction = inst_cfg[idx % 2]
-
                 line = line.strip()
                 if not line:
                     continue
                 a_dict = json.loads(line)
 
-                a_dict["query"] =  a_dict["query"] 
-                # 保留原 positive / negative
-                a_dict["positive"] = a_dict["positive"]
-                a_dict["negative"] = a_dict["negative"]
+                for key in ("query", "positive", "negative"):
+                    if key not in a_dict:
+                        raise ValueError(f"{now_file} 中存在缺少 {key} 字段的样本")
                 all_data.append(a_dict)
 
     if len(all_data) == 0:
@@ -118,8 +108,8 @@ def load_data_and_sampling(file_path: str):
     return query, positive, negative
 
 def load_eval_data(path):
-    file_in = open(path, "r")
-    all_sentences = file_in.readlines()
+    with open(path, "r", encoding="utf-8") as file_in:
+        all_sentences = file_in.readlines()
     random.shuffle(all_sentences)
     all_sentences = all_sentences[:12000]
     n = len(all_sentences) // 3  # 每份长度，自动舍弃不能整除的尾部
@@ -351,30 +341,9 @@ def HamJEPAReg(z, proj_dim=64, target_norm=1.0, target_pr=8.0):
 
 
 
-    # 修改版infoNCE 优化
-    # 提升 gram matrix 的最小特征值
-    # temperature_adjustment = torch.full_like(gram_matrix, temperature / gram_matrix.shape[0])
-    # num_positive_pairs = gram_matrix.shape[0]
-    # diag_temp = torch.eye(num_positive_pairs) * temperature
-    # diag_temp = diag_temp.to(temperature_adjustment.device, dtype=temperature_adjustment.dtype)
-    # diag_temp[~torch.eye(num_positive_pairs).to(torch.bool)] = temperature_adjustment[~torch.eye(num_positive_pairs).to(torch.bool)]
-    # temperature_adjustment[:num_positive_pairs, :num_positive_pairs] = diag_temp
-
-    # temp_apply = gram_matrix / temperature_adjustment #temperature_adjustment
-
-    
-    # probs = F.log_softmax(temp_apply, dim=1)
-
-    # ground_truth = torch.arange(
-    #     probs.shape[0], device=probs.device, dtype=torch.long
-    # )
-
-    # loss = F.nll_loss(probs, ground_truth)
-
-    return loss
-
 # dataset cover classification task, retrieval task, clustering task, reranking task, sts task
 def evaluation(eval_dataloader, model_engine, step, output_dir="./gram_results"):
+    output_dir = os.path.join(output_dir, f"step_{step}")
     os.makedirs(output_dir, exist_ok=True)
 
     all_query = []
@@ -468,8 +437,7 @@ if tokenizer.pad_token is None:
     if tokenizer.eos_token is not None:
         tokenizer.pad_token = tokenizer.eos_token
     else:
-        # 退一步，新增一个 pad_token
-        tokenizer.add_special_tokens({"pad_token": "[PAD]"})
+        raise ValueError("tokenizer 缺少 pad_token 和 eos_token，无法安全构造 padding")
 
 
 # ========= 日志 =========
@@ -522,7 +490,10 @@ evaluation_ds.set_format(
 # ========= 模型与 DeepSpeed =========
 torch.cuda.set_device(training_args.local_rank)
 
-model = InforNCE_and_Eigenvalue(training_args.local_rank)
+model = InforNCE_and_Eigenvalue(
+    model_name=model_args.model_name,
+    local_rank=training_args.local_rank,
+)
 
 model_engine, _,  _, _ = deepspeed.initialize(
     args=training_args,
@@ -554,6 +525,7 @@ for epoch in range(training_args.train_epoch):
     for idx, batch in enumerate(
         tqdm(data_loader, desc=f"Epoch: {epoch + 1}", total=1000)
     ):
+        global_step = epoch * len(data_loader) + idx
         batch = {k: v.cuda() for k, v in batch.items()}
         # InfoNCE loss
         # 这里假设 va_model.forward 接受和 batch 键同名的参数
@@ -579,7 +551,7 @@ for epoch in range(training_args.train_epoch):
         # diag_temp = diag_temp.to(temperature_adjustment.device, dtype=temperature_adjustment.dtype)
         # diag_temp[~torch.eye(num_positive_pairs).to(torch.bool)] = temperature_adjustment[:num_positive_pairs, :num_positive_pairs][~torch.eye(num_positive_pairs).to(torch.bool)]
         # temperature_adjustment[:num_positive_pairs, :num_positive_pairs] = diag_temp
-        temp_apply = dot_products / temperature #temperature_adjustment
+        temp_apply = dot_products / temperature
         probs = F.log_softmax(temp_apply, dim=1)
 
         ground_truth = torch.arange(
@@ -590,16 +562,19 @@ for epoch in range(training_args.train_epoch):
 
 
         # r_loss = regularization_loss(full_query_embedding, full_positive_embedding, full_negative_embedding)
-        all_embeddings = torch.cat([full_query_embedding, full_positive_embedding, full_negative_embedding], dim=0)
+        all_embeddings = torch.cat(
+            [full_query_embedding, full_positive_embedding, full_negative_embedding],
+            dim=0,
+        )
         norm_embeddings = normalize_embedding(all_embeddings)
         # r_loss = SIGReg(norm_embeddings, idx)
         # final_loss = loss + r_loss
         h_loss = HamJEPAReg(
-                norm_embeddings,
-                proj_dim=64,     # 投影维度（论文 64/128）
-                target_norm=1.0, # 目标范数
-                target_pr=8.0    # 最小参与率
-            )
+            norm_embeddings,
+            proj_dim=64,      # 投影维度（论文 64/128）
+            target_norm=1.0,  # 目标范数
+            target_pr=8.0,    # 最小参与率
+        )
         final_loss = loss + h_loss
 
         model_engine.backward(final_loss)
@@ -615,7 +590,7 @@ for epoch in range(training_args.train_epoch):
 
         if idx % 30 == 0:
             model_engine.eval()
-            result = evaluation(eval_dataloader, model_engine)
+            evaluation(eval_dataloader, model_engine, step=global_step)
             model_engine.train()
         model_engine.step()
 

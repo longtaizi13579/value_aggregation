@@ -417,15 +417,15 @@ class Value_Aggregation_Eval(nn.Module):
 
 
 class InforNCE_and_Eigenvalue(nn.Module):
-    def __init__(self, local_rank=0) -> None:
+    def __init__(self, model_name, local_rank=0) -> None:
         super().__init__()
-        model_name = "meta-llama/Llama-2-7b-chat-hf"
+        self.model_name = model_name
         self.model = AutoModelForCausalLM.from_pretrained(
-            model_name,
+            self.model_name,
             use_auth_token=use_auth_token
         )
         self.tokenizer = AutoTokenizer.from_pretrained(
-            model_name,
+            self.model_name,
             use_auth_token=use_auth_token
         )
         torch.cuda.set_device(local_rank)
